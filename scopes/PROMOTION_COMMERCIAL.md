@@ -1,19 +1,28 @@
 # Promotion & Commercial Rules Scope Contract
 
-Kind: `SHARED_BUSINESS_CAPABILITY`
-Status: `NEXT`
-Entitlement Class: `CAPABILITY`
-Commercial Packaging: `ADD_ON_CAPABLE`
+Kind: `SHARED_BUSINESS_CAPABILITY`  
+Status: `NEXT`  
+Entitlement Class: `CAPABILITY`  
+Commercial Packaging: integrated customer-loyalty/commercial suite, add-on/bundle capable
 
 ## Purpose
 
-Provide one reusable Promotion/Commercial Rules authority that can be consumed by POS, Workshop, and future Digvation business domains without duplicating promotion engines inside each domain.
+Provide one reusable Promotion/Commercial Rules authority for temporary commercial offers consumed by POS, Scheduling, Workshop, and future Digvation domains.
 
-Promotion is responsible for time-bound commercial offers and eligibility/benefit rules. It does not own the base Catalog, Membership ledger, Tax/Fiscal calculation, POS sale, or Workshop work order.
+For the current product direction, **Promotion is part of one integrated Membership + Loyalty Points + Promotion business suite**, while preserving separate durable authorities:
+
+```text
+Customer
+  -> Membership
+      -> Loyalty Points
+
+Promotion
+  -> temporary discount/member/bonus-point outcomes
+```
+
+Promotion does not own Customer identity, Membership state, the Loyalty ledger, Catalog master data, Tax/Fiscal rules, POS Sale/payment, or another transaction domain.
 
 ## Commercial Availability / Effective Entitlement
-
-Promotion is **not automatically enabled** merely because a client owns POS, Workshop, Catalog, or Membership.
 
 Canonical capability:
 
@@ -21,271 +30,492 @@ Canonical capability:
 PROMOTIONS
 ```
 
-`PROMOTIONS` is add-on-capable. A SaaS plan may sell it separately or bundle it, but CORE/control-plane must resolve that commercial package into an explicit effective capability entitlement.
+Promotion may be commercially bundled together with Membership and Loyalty Points.
 
-Examples:
+That packaging decision does not collapse runtime authority.
 
-```text
-Client A
-POS = enabled
-PROMOTIONS = disabled
+The effective capability set remains authoritative.
 
-Client B
-POS = enabled
-PROMOTIONS = enabled   # bundled in SaaS plan or purchased add-on
+Source-code presence, navigation presence, business type, deployment mode, or branding never grants Promotion.
 
-Client C
-Workshop = enabled
-PROMOTIONS = enabled
-```
+## Current Integrated Suite Decision
 
-Source-code presence, a visible menu implementation, dedicated deployment, or white-label branding never grants Promotion capability. Backend authorization is authoritative.
+Current Digvation business experience treats these features as one coherent commercial/customer-retention suite:
 
-## Owns / Authority
-
-When activated by an explicit feature task, Promotion may own:
-
-- promotion/campaign identity and lifecycle;
-- promotion validity/effective period;
-- applicable business-domain scope;
-- applicable branch/location scope;
-- Catalog targeting references such as all catalog, category/classification, item/product, service, or reusable tags when supported by Catalog;
-- customer/member eligibility references such as membership program/tier/segment where the authoritative capability exists;
-- commercial benefit definition such as percentage/fixed discount, fixed promotional price, member price, bonus points, or point multiplier when explicitly supported;
-- minimum-spend/quantity and other eligibility conditions when explicitly supported;
-- priority and stacking/exclusivity policy;
-- usage limits where explicitly supported;
-- draft/active/inactive/expired lifecycle;
-- promotion approval state/policy when approval is enabled;
-- applied-promotion result/reference semantics required by historical transactions.
-
-This is the domain envelope, not automatic implementation authorization.
-
-## Consumes / Depends On
-
-Promotion may consume explicit contracts from:
-
-- Catalog for product/item/service/category/classification references;
-- Customer & Membership for member identity, tier, eligibility, and loyalty capability where applicable;
-- Organization & Location for branch/location scope;
-- Account/Identity/RBAC for actor permission;
-- Operational Access for Manager/location authority;
-- Audit & Activity for immutable business-semantic change records;
-- authoritative transaction context from POS, Workshop, or another consuming domain.
-
-Promotion must not directly read another domain's repository/database to evaluate eligibility.
-
-## Catalog Relationship
-
-Promotion references Catalog; it does not own Catalog.
-
-Do not store durable promotion rules directly on a catalog entry merely because a promotion targets that entry.
+- Membership;
+- Loyalty Points;
+- Promotions.
 
 Conceptually:
 
 ```text
-Catalog
-  -> Product / Item / Service / Category / Classification
-                         |
-                         v
-                  Promotion Rule
+Membership
+  -> identifies eligible member
+
+Loyalty
+  -> durable earn/redeem rules
+  -> balance/ledger
+
+Promotion
+  -> temporary offer/rule
+  -> may reference Membership
+  -> may temporarily modify Loyalty outcome
 ```
 
-A rule may target, when explicitly supported:
+The Backoffice may present these areas cohesively, but services/models must preserve ownership boundaries.
+
+## Owns / Authority
+
+Promotion owns:
+
+- promotion identity;
+- promotion name/description;
+- promotion lifecycle;
+- validity/effective period;
+- applicable location scope;
+- Catalog target references;
+- Customer/Member eligibility;
+- temporary commercial benefit;
+- temporary loyalty bonus/multiplier;
+- priority;
+- simple stacking/exclusivity policy where current scope supports it;
+- applied-promotion historical result/reference needed by transactions.
+
+Promotion does not directly mutate point balances.
+
+## Current Promotion Lifecycle
+
+Use a minimal lifecycle:
+
+- `DRAFT`
+- `ACTIVE`
+- `INACTIVE`
+- `EXPIRED`
+
+Current scope does not require approval workflow.
+
+If approval is activated later, additional states/actions must be explicitly designed.
+
+Runtime is authoritative for whether a promotion is currently effective.
+
+## Validity
+
+A promotion may define:
+
+- start date/time;
+- end date/time.
+
+Runtime evaluates validity.
+
+Frontend display must not be the only enforcement.
+
+## Location Scope
+
+A promotion may apply to:
+
+- explicitly selected authorized location(s);
+- organization-wide only when the actor has organization-level authority.
+
+Permissions and location scope are backend-authoritative.
+
+Do not use literal `Owner` or `Manager` role names as durable authorization logic.
+
+## Catalog Targeting
+
+Promotion references Catalog and does not own it.
+
+Current first checkpoint supports targeting:
+
+- all eligible Catalog entries;
+- selected Catalog item/product/service entries.
+
+Category/classification/tag targeting may be added later when explicitly activated.
+
+Current Promotion must work with both product and service Catalog entries when the consuming domain supports them.
+
+Promotion must not store temporary campaign state directly on Catalog entries.
+
+## Customer / Membership Eligibility
+
+Current promotion eligibility may be:
+
+- `ALL_CUSTOMERS`;
+- `MEMBERS_ONLY`.
+
+`MEMBERS_ONLY` requires Membership capability/context.
+
+Advanced tier/segment eligibility is deferred until those concepts are explicitly activated.
+
+A Promotion may be valid without Membership.
+
+## Current Benefit Types
+
+Current first checkpoint supports a deliberately small set of benefit types.
+
+### 1. Percentage Discount
+
+Example:
 
 ```text
-ALL_CATALOG
-CATEGORY / CLASSIFICATION
-ITEM / PRODUCT
-SERVICE
-TAG
+10% discount
 ```
 
-The exact targeting vocabulary should follow the actual Catalog contract rather than introducing a parallel classification system.
+### 2. Fixed Amount Discount
 
-## Membership / Loyalty Relationship
-
-Membership owns durable loyalty state such as program enrollment, tier, points balance/ledger, earning rules, and redemption rules when those capabilities are active.
-
-Promotion may define temporary commercial benefits that reference Membership, for example:
-
-- Gold members receive an additional discount during a validity period;
-- members receive bonus points for selected catalog items;
-- members receive a temporary point multiplier.
-
-Promotion must not become the points ledger authority.
-
-A normal catalog-based loyalty earning rule remains Membership-owned. A temporary campaign that modifies/boosts the earning outcome is Promotion-owned and must resolve through an explicit Membership/Loyalty contract.
-
-## Owner / Manager Promotion Authority
-
-Promotion management must follow Account/Identity/RBAC and Operational location access rather than trusting role labels only in the UI.
-
-Canonical default scope:
-
-- **Owner** may manage promotions across the organization and all active locations, subject to entitlement/runtime/permission checks;
-- **Manager** may create/manage promotions only for branch/location assignments they are authorized to manage;
-- a Manager assigned to Branch A and Branch B must not create or activate a promotion for Branch C;
-- other roles may manage promotions only when an explicit permission/policy grants it, and still within their authorized scope.
-
-Backend enforcement is authoritative.
-
-For location selection:
+Example:
 
 ```text
-0 permitted locations -> deny promotion location scope
-1 permitted location  -> auto-resolve; no forced selector
-2+ permitted locations -> allow selection only from permitted locations
+Rp20.000 discount
 ```
 
-An organization-wide promotion is not implicitly available to a Manager merely because that Manager can access multiple branches. Organization-wide authority requires the appropriate organization-level permission/policy.
+### 3. Loyalty Bonus Points
 
-## Approval Policy
-
-The architecture must allow promotion approval policy without forcing it on every client.
-
-Examples:
+Example:
 
 ```text
-Manager creates -> ACTIVE
++5 bonus points
 ```
 
-or, when configured:
+The resulting point ledger entry remains Loyalty-owned.
+
+### 4. Loyalty Point Multiplier
+
+Example:
 
 ```text
-Manager creates DRAFT
-      -> submit
-      -> authorized approver (for example Owner)
-      -> ACTIVE / REJECTED
+2x normal points
 ```
 
-Do not implement approval workflow unless the current feature scope activates it.
+Promotion determines the temporary multiplier.
+Loyalty applies/finalizes the resulting earning outcome in its ledger.
 
-## Tax / Fiscal Relationship
+Fixed promotional price, BOGO, free item/service, coupons, vouchers, and advanced discount formulas are deferred unless explicitly activated.
 
-Promotion does not calculate Tax/Fiscal rules.
+## Promotion and Loyalty Rule Relationship
 
-Money-affecting evaluation must use an explicit backend-authoritative ordering/policy between:
+Normal/durable rules belong to Loyalty:
 
 ```text
-Base/List Price
--> Promotion / Membership benefit outcome
--> Tax/Fiscal evaluation
--> Final transaction snapshot
+Rp10.000 = 1 point
+Hair Coloring = 20 fixed points
+Gift Card = no normal points
+10 points = Rp10.000 redemption value
 ```
 
-The exact calculation/stacking/tax-base policy must be defined by the applicable transaction/commercial contract before implementation. Frontends must not independently infer the ordering.
+Temporary campaign rules belong to Promotion:
 
-Historical transactions must preserve the applied promotion/benefit outcome and relevant rule/reference snapshot so later edits do not rewrite past monetary results.
+```text
+This weekend:
+Haircut earns 2x points
+
+September:
+Members receive +5 bonus points on Service A
+```
+
+Promotion does not replace the underlying normal earning rule.
+
+Conceptually:
+
+```text
+Loyalty normal earning result
+       |
+       +---- Promotion temporary modifier
+       |
+       v
+Final earned-points outcome
+       |
+       v
+Loyalty ledger
+```
+
+## Promotion and Membership Relationship
+
+Membership provides member identity/status.
+
+Promotion may require:
+
+```text
+MEMBERS_ONLY
+```
+
+Promotion must not create a second Membership record or membership status authority.
+
+If Membership is not available, member-only promotion evaluation must not silently treat every customer as eligible.
+
+## Discount Calculation Boundary
+
+Promotion supplies a backend-authoritative commercial benefit outcome to the consuming transaction domain.
+
+POS or another transaction owner remains responsible for authoritative transaction totals.
+
+Conceptually:
+
+```text
+Catalog/base transaction input
+       |
+       v
+Promotion evaluation
+       |
+       v
+applied promotion outcome/reference
+       |
+       v
+Transaction domain calculates authoritative monetary snapshot
+```
+
+Promotion must not become POS Sale authority.
+
+## Interaction with Loyalty Earning
+
+Current policy:
+
+Normal spend-based Loyalty earning uses the accepted eligible transaction amount after ordinary Promotion discounts.
+
+Example:
+
+```text
+Service price        Rp100.000
+Promotion discount   Rp20.000
+Eligible spend       Rp80.000
+
+Loyalty:
+Rp10.000 = 1 point
+
+Normal earn = 8 points
+```
+
+If the Promotion also defines:
+
+```text
+2x points
+```
+
+then the Promotion modifier applies to the normal Loyalty result according to the explicit evaluation contract:
+
+```text
+8 normal points
+x2 promotion multiplier
+= 16 final earned points
+```
+
+The final ledger history remains Loyalty-owned and must preserve the promotion reference used to derive the result.
+
+## Interaction with Loyalty Redemption
+
+Loyalty redemption is governed by Membership/Loyalty configuration, not Promotion.
+
+Promotion may reduce the monetary transaction outcome.
+
+Loyalty then validates any redemption against the authoritative eligible transaction context and configured redemption limits.
+
+Do not let Promotion directly debit points.
+
+## Current Stacking Policy
+
+Avoid a complex combinability engine in the first checkpoint.
+
+Current rule:
+
+- monetary promotions are non-stackable by default;
+- when multiple monetary promotions are eligible, an explicit deterministic priority/evaluation rule must choose the applicable promotion;
+- loyalty bonus/multiplier may coexist with one monetary promotion only when explicitly configured/supported by the evaluation contract.
+
+Do not invent arbitrary frontend stacking.
+
+Advanced stack groups, combinability matrices, and optimizer behavior are deferred.
+
+## Usage / Historical Integrity
+
+When a Promotion affects a transaction, the transaction/loyalty integration must preserve enough historical references/snapshots so later Promotion edits do not rewrite past outcomes.
+
+At minimum, historical application should preserve:
+
+- promotion identifier/reference;
+- benefit type;
+- applied monetary or loyalty outcome;
+- applicable rule/version/snapshot information required by current Runtime design.
+
+Do not recalculate old Sale history using the current Promotion configuration.
+
+## Authorization
+
+Promotion management is permission-based.
+
+Conceptual permission areas:
+
+- promotion read;
+- promotion create;
+- promotion update;
+- promotion activate/deactivate;
+- promotion delete/archive if current repository policy allows;
+- promotion organization-wide management;
+- promotion location-scoped management.
+
+Location/organization scope remains authoritative.
+
+Examples of business users who may receive these permissions include owners/managers, but literal role labels are not the authority.
 
 ## Backoffice Contribution
 
-Promotion contributes a shared Backoffice commercial-management surface, conceptually such as:
+Promotion participates in the unified customer-loyalty/commercial experience.
+
+Conceptually:
 
 ```text
-Commercial
+Customers
+  -> Membership
+  -> Points
+
+Commercial / Customer Loyalty
   -> Promotions
+
+Configuration
+  -> Membership & Loyalty
+  -> Promotion defaults/policies where applicable
 ```
 
-Potential management capabilities, only when activated:
+Exact navigation must follow current Backoffice information architecture and Design System conventions.
 
-- promotion list/search/filter;
-- create/edit/detail;
-- validity/effective period;
-- domain applicability;
-- branch/location applicability;
-- Catalog target selection;
-- Customer/Membership eligibility;
-- benefit configuration;
-- stacking/priority/usage rules;
-- lifecycle/approval status;
-- audit/history visibility.
+Current Promotion management surface may include:
 
-The UI must adapt to available business domains and Catalog capabilities instead of displaying every future rule at the same visual level.
-
-Any Promotion UI work must use `uiuxpromax` and the existing Digvation Design System.
+- list/search/filter;
+- create;
+- detail;
+- edit;
+- activate/deactivate;
+- validity period;
+- location scope;
+- Catalog targets;
+- customer/member eligibility;
+- benefit type/value;
+- simple priority;
+- current lifecycle/status;
+- audit/history when Activity integration is implemented.
 
 ## Operational Contribution
 
-Promotion normally does not create a standalone Operational module.
+Promotion normally has no standalone Operational application.
 
-Operational domains such as POS or Workshop consume authoritative promotion evaluation and may show:
+POS or another operational domain may show:
 
-- eligible/applied offer;
-- discount/benefit result;
-- member benefit;
-- promotion reference where appropriate.
+- eligible Promotion;
+- applied discount;
+- member-only benefit;
+- bonus-point/multiplier result;
+- promotion reference/name where useful.
 
-Operational clients must not become promotion-rule authorities.
+Operational clients must not own/evaluate durable promotion truth independently.
 
 ## Dashboard Projection
 
-When activated, Promotion may contribute safe commercial indicators such as:
+When activated:
 
-- active/upcoming promotions;
+- active promotions;
+- upcoming promotions;
 - promotions nearing expiry;
-- promotion utilization counts where transaction-domain projections exist;
-- discount/benefit value where authoritative financial projections exist.
+- promotion usage count through explicit transaction projections;
+- promotional discount/benefit value through authoritative projections;
+- bonus points issued through Loyalty projection.
 
-Performance metrics that depend on sales/work-order data must use explicit projections from the owning transaction domains rather than direct cross-domain table access.
+Promotion does not own sales/revenue authority.
 
 ## Report Projection
 
-When activated, Promotion may register reports such as:
+When activated:
 
-- promotion master/status report;
-- promotion validity/location/catalog-scope report;
-- promotion utilization report through authoritative transaction projections;
-- discount/benefit impact report through authoritative monetary projections.
+- promotion master/status;
+- promotion validity/location/target scope;
+- promotion utilization through transaction-domain projections;
+- promotion discount impact through monetary projections;
+- promotion bonus-point impact through Loyalty projections.
+
+No direct cross-domain database joins.
 
 ## Audit & Activity
 
-Important promotion administration must emit business-semantic audit activity, for example:
+Important administration should emit business-semantic Activity/Audit records when implemented.
 
-- `PROMOTION_CREATED`;
-- `PROMOTION_UPDATED`;
-- `PROMOTION_SUBMITTED`;
-- `PROMOTION_APPROVED`;
-- `PROMOTION_REJECTED`;
-- `PROMOTION_ACTIVATED`;
-- `PROMOTION_DEACTIVATED`.
+Examples:
 
-Audit records must preserve actor, tenant, authorized location scope, affected promotion reference, meaningful changes, timestamp, and result without storing secrets.
+- `PROMOTION_CREATED`
+- `PROMOTION_UPDATED`
+- `PROMOTION_ACTIVATED`
+- `PROMOTION_DEACTIVATED`
+
+Approval-related audit events remain deferred with approval workflow.
 
 ## Current Scope
 
-The Promotion/Commercial Rules **boundary and domain envelope are now defined**.
+The current locked first Promotion checkpoint includes:
 
-No promotion engine, page, API, migration, approval flow, discount type, or loyalty bonus behavior is automatically authorized by this document.
-
-The first implementation checkpoint must be explicitly supplied by the user.
+- Promotion capability-aware availability;
+- `DRAFT`, `ACTIVE`, `INACTIVE`, `EXPIRED`;
+- start/end validity;
+- location scope;
+- all-catalog or selected Catalog-entry targeting;
+- all-customer or member-only eligibility;
+- percentage discount;
+- fixed-amount discount;
+- loyalty bonus points;
+- loyalty point multiplier;
+- deterministic simple priority;
+- non-stackable monetary promotion default;
+- backend-authoritative evaluation;
+- historical applied-promotion reference/outcome;
+- POS consumption/integration;
+- explicit Membership/Loyalty integration;
+- Backoffice management surface;
+- no standalone Operational module.
 
 ## Deferred / Future
 
 Unless explicitly activated:
 
-- coupons/vouchers/codes;
+- coupons/codes;
+- voucher system;
 - buy-X-get-Y;
 - free item/free service;
-- advanced audience segmentation;
+- fixed promotional price;
+- advanced Catalog category/tag targeting;
+- Membership tiers;
+- customer segmentation;
+- birthday campaign;
+- referral campaign;
 - campaign budget/cost controls;
-- promotion scheduling automation beyond basic validity;
-- channel-specific promotions;
-- campaign orchestration/marketing automation;
-- complex combinability engines;
+- advanced usage quotas;
+- channel-specific campaigns;
+- approval workflow;
+- advanced stacking/combinability matrices;
+- automatic promotion optimization;
 - external promotion providers;
-- any benefit type not explicitly scoped.
+- marketing automation/orchestration;
+- push/email campaign delivery;
+- cross-tenant campaigns.
 
 ## Integration Rules
 
-- one reusable Promotion authority for cross-domain commercial offers;
-- POS and Workshop must not create separate drifting promotion engines;
-- Catalog is referenced, not owned by Promotion;
-- Membership owns loyalty state/ledger; Promotion may temporarily modify eligible benefits through explicit contracts;
-- Tax/Fiscal remains the tax authority;
-- promotion effects on money are backend-authoritative;
-- Owner/Manager location authority is backend-enforced;
-- organization-wide vs location-scoped authority must be explicit;
-- historical monetary transactions preserve applied promotion outcomes;
-- promotion visibility/configuration follows entitlement, runtime capability, permission, location scope, Catalog capability, and relevant business-domain context;
-- no client-name or hard-coded business-type branching as authority.
+- one reusable Promotion authority across business domains;
+- Membership + Loyalty + Promotion form one integrated business suite but remain separate durable authorities;
+- Promotion may reference Customer/Member eligibility;
+- Promotion may temporarily modify Loyalty earning;
+- Promotion never owns Loyalty balance/ledger;
+- Loyalty owns normal earning/redemption rules;
+- Catalog is referenced, not owned;
+- POS owns Sale/payment;
+- Promotion returns authoritative benefit outcomes/references but does not own Sale totals;
+- monetary promotion effects are backend-authoritative;
+- point bonus/multiplier effects are resolved through Loyalty;
+- historical outcomes preserve applied Promotion references;
+- permission and location/organization scope are backend-enforced;
+- no literal role-name branching as authority;
+- no direct cross-domain database/repository access;
+- no client-name/business-type branching as feature authority;
+- capability availability follows the effective entitlement set.
+
+## Implementation Gate
+
+This scope locks Promotion behavior and its relationship with Membership/Loyalty.
+
+It does not authorize implementation by itself.
+
+Implementation should begin only after the current Operational baseline is accepted, unless the user explicitly changes that priority.
