@@ -1,0 +1,15 @@
+[    2338ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
+    at r1 (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:37069)
+    at ih (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:88497)
+    at sy (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:129326)
+    at https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:129171
+    at sv (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:129179)
+    at so (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:124312)
+    at sX (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:151014)
+    at sW (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:149227)
+    at sP (https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:146871)
+    at https://21st.dev/_next/static/chunks/7a352a36-9a6dff3dac43a2b0.js:1:144287
+[    3653ms] [WARNING] Warning: Missing `Description` or `aria-describedby={undefined}` for {DialogContent}. @ https://21st.dev/_next/static/chunks/95142-c30eb5e19fc15e73.js:4
+[    4205ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://cdn.21st.dev/felipemenezes098/sign-in-6/default/bundle.1783675693650.html?theme=light&pv=1:0
+[    6176ms] [WARNING] [GSI_LOGGER]: Your client application uses one of the Google One Tap prompt UI status methods that may stop functioning when FedCM becomes mandatory. Refer to the migration guide to update your code accordingly and opt-in to FedCM to test your changes. Learn more: https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#display_moment and https://developers.google.com/identity/gsi/web/guides/fedcm-migration?s=dc#skipped_moment @ https://accounts.google.com/gsi/client:86
+[    6184ms] [ERROR] Not signed in with the identity provider. @ https://21st.dev/community/components?q=login&preview=%2F%40felipemenezes098%2Fcomponents%2Fsign-in-6:0

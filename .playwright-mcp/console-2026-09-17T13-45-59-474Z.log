@@ -1,0 +1,2 @@
+[     706ms] [VERBOSE] [DOM] Password field is not contained in a form: (More info: https://goo.gl/9p2vKq) %o @ https://cdn.21st.dev/felipemenezes098/sign-in-6/default/bundle.1783675693650.html?theme=light&pv=1:0
+[    1013ms] [ERROR] Failed to load resource: the server responded with a status of 404 () @ https://cdn.21st.dev/vite.svg:0
