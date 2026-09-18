@@ -1,4 +1,4 @@
-# Digvation Lifecycle
+﻿# Digvation Lifecycle
 
 Digvation canonical authority:
 1. Current explicit instruction
@@ -29,7 +29,7 @@ For GitHub:
 - use GitHub only when current remote state, branches, PRs, commits,
   or remote files are required.
 
-REUSE → EXTEND → NEW.
+REUSE â†’ EXTEND â†’ NEW.
 
 Stop at READY_FOR_MANUAL_REVIEW unless explicitly authorized otherwise.
 
@@ -52,4 +52,5 @@ For any Digvation implementation, review, debugging, architecture, release, or d
 
 Keep context lean: load evidence on demand, not the whole ecosystem.
 <!-- DIGVATION_CLAUDE_BOOTSTRAP:END -->
+
 

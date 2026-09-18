@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n \"private openSale\\\\|openSale\\(\\\\|const clone\\\\|function timestamp\\\\|SetSaleLineQuantityInput,$\" apps/operational/src/features/sell/local-demo-cashier-transaction.adapter.ts)",
+      "Bash(python \"C:/Users/dicky/AppData/Local/Temp/claude/c--Users-dicky-Documents-work-digvation-lifecycle/3fad0daf-404f-408a-a9e1-46e3bf5927b5/scratchpad/stage3.py\")",
+      "Bash(python \"C:/Users/dicky/AppData/Local/Temp/claude/c--Users-dicky-Documents-work-digvation-lifecycle/3fad0daf-404f-408a-a9e1-46e3bf5927b5/scratchpad/stage5.py\")",
+      "Bash(git commit -m '@ *)",
+      "Bash(git push *)",
+      "Bash(git -C \"C:/Users/dicky/Documents/work/digvation/lifecycle/business/digvation-business-runtime\" log --oneline -1)",
+      "Bash(git -C \"C:/Users/dicky/Documents/work/digvation/lifecycle/business/digvation-business-runtime\" status --short)"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+- main [ref=e19]:
+  - generic [ref=e20]:
+    - generic [ref=e21]:
+      - heading "Digvation" [level=1] [ref=e28]
+      - paragraph [ref=e29]: Operational
+    - generic [ref=e30]:
+      - heading "Masuk ke Operational" [level=2] [ref=e31]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - generic [ref=e34]: ID pengguna
+          - generic [ref=e36]:
+            - textbox "ID pengguna" [ref=e37]:
+              - /placeholder: Nama pengguna atau email
+              - text: Owner
+            - button "Hapus input" [ref=e39]
+        - generic [ref=e42]:
+          - generic [ref=e43]: Kata sandi
+          - generic [ref=e45]:
+            - textbox "Kata sandi" [ref=e46]: OwnerDigvation123!
+            - generic [ref=e47]:
+              - button "Hapus input" [ref=e48]
+              - button "Tampilkan password" [ref=e51]
+        - button "Masuk" [ref=e55]
