@@ -1,0 +1,5 @@
+# Playwright MCP screenshots/snapshots - transient test artifacts
+.playwright-mcp/
+# graphify's own bundled skill docs - third-party, not project knowledge
+.claude/skills/graphify/
+graphify-out/

@@ -9,5 +9,30 @@
       "Bash(git -C \"C:/Users/dicky/Documents/work/digvation/lifecycle/business/digvation-business-runtime\" log --oneline -1)",
       "Bash(git -C \"C:/Users/dicky/Documents/work/digvation/lifecycle/business/digvation-business-runtime\" status --short)"
     ]
+  },
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Users/dicky/.local/bin/graphify.EXE hook-guard search"
+          }
+        ]
+      },
+      {
+        "matcher": "Read|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "C:/Users/dicky/.local/bin/graphify.EXE hook-guard read"
+          }
+        ]
+      }
+    ]
   }
 }
