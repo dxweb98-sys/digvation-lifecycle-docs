@@ -1,12 +1,18 @@
-# Graph Report - .  (2026-09-19)
+# Graph Report - lifecycle  (2026-09-20)
 
 ## Corpus Check
-- Corpus is ~44,435 words - fits in a single context window. You may not need a graph.
+- 78 files · ~68,193 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 186 nodes · 401 edges · 11 communities
-- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.8)
+- 334 nodes · 519 edges · 38 communities (20 shown, 18 thin omitted)
+- Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `1c3d09fc`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - Commerce Domain Scopes
@@ -15,6 +21,33 @@
 - Agent Skills & Routing
 - Finance, Audit & RBAC
 - CORE Control Plane
+- graphify reference: extra exports and benchmark
+- graphify reference: query, path, explain
+- graphify reference: query, path, explain
+- graphify reference: add a URL and watch a folder
+- graphify reference: commit hook and native CLAUDE.md integration
+- graphify reference: incremental update and cluster-only
+- graphify reference: add a URL and watch a folder
+- graphify reference: commit hook and native CLAUDE.md integration
+- graphify reference: incremental update and cluster-only
+- graphify reference: GitHub clone and cross-repo merge
+- graphify reference: transcribe video and audio
+- graphify reference: GitHub clone and cross-repo merge
+- graphify reference: transcribe video and audio
+- backup-20260919-230448/digvation-debug/SKILL.md
+- backup-20260919-230448/digvation-feature/SKILL.md
+- backup-20260919-230448/digvation-release/SKILL.md
+- backup-20260919-230448/digvation-router/SKILL.md
+- backup-20260919-230448/digvation-security/SKILL.md
+- backup-20260919-230448/digvation-ui/SKILL.md
+- backup-20260919-230448/graphify/references/extraction-spec.md
+- skills/digvation-debug/SKILL.md
+- skills/digvation-feature/SKILL.md
+- skills/digvation-release/SKILL.md
+- skills/digvation-router/SKILL.md
+- skills/digvation-security/SKILL.md
+- skills/digvation-ui/SKILL.md
+- skills/graphify/references/extraction-spec.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `Ecosystem Architecture` - 33 edges
@@ -51,54 +84,91 @@
 - **Integrated Customer + Membership + Loyalty + Promotion suite** — scopes_customer_membership_customer_identity, scopes_customer_membership_membership, scopes_customer_membership_loyalty_points, scopes_customer_membership_point_ledger_entry, scopes_promotion_commercial_promotion [EXTRACTED 1.00]
 - **Entitlement-gated dashboard/reporting composition** — scopes_dashboard_reporting_composition_authority, scopes_readme_effective_entitlement_set, scopes_dashboard_reporting_domain_contribution_model, scopes_dashboard_reporting_cross_domain_report_rule [INFERRED 0.85]
 
-## Communities (11 total, 0 thin omitted)
+## Communities (38 total, 18 thin omitted)
 
 ### Community 0 - "Commerce Domain Scopes"
-Cohesion: 0.12
-Nodes (40): Catalog Entry / Classification, Catalog Pricing Boundary, Catalog Scope Contract, Customer Identity (CUSTOMER_IDENTITY), Loyalty Points (LOYALTY_POINTS), Loyalty Rule Precedence (Catalog-specific FIXED_POINTS/EXCLUDED over Default Spend Rule), Membership (enrollment/status), Loyalty Point Ledger (PointLedgerEntry) (+32 more)
+Cohesion: 0.08
+Nodes (67): Audit/Activity Record (append-only, business-semantic), Audit & Activity Scope Contract, Audit Sensitive Data Rules, Catalog Entry / Classification, Catalog Pricing Boundary, Catalog Scope Contract, Customer Identity (CUSTOMER_IDENTITY), Loyalty Points (LOYALTY_POINTS) (+59 more)
 
 ### Community 1 - "Security, Infra & Release"
-Cohesion: 0.12
-Nodes (33): digvation-security Skill, Authoritative Security Boundaries, Digvation Infrastructure Repository Agent Contract, Lifecycle Overlay Installation, Client Installation Standard, Client Infrastructure Preflight Gate, PRODUCTION_ACTIVE Acceptance Checklist, Supported Deployment Modes (Dedicated-Digvation / Dedicated-Client / Shared SaaS) (+25 more)
+Cohesion: 0.06
+Nodes (62): Graphify Skill Pointer (.claude/CLAUDE.md), digvation-debug Skill, Superpowers Systematic Debugging, digvation-feature Skill, digvation-release Skill, Remote Mutation Gate, digvation-router Skill, digvation-security Skill (+54 more)
 
 ### Community 2 - "Runtime & Web Engineering"
-Cohesion: 0.11
-Nodes (30): Digvation Business Runtime Engineering Contract, Backend/Domain Ownership Classification, Database and Migration Rules, Transactional and Financial Integrity, Digvation Business Web Engineering Contract, apps/backoffice (Backoffice Foundation), apps/cashier (POS Operational Implementation), contracts/contract-lock.json (+22 more)
+Cohesion: 0.07
+Nodes (47): Digvation Business Runtime Engineering Contract, Backend/Domain Ownership Classification, Database and Migration Rules, Transactional and Financial Integrity, Digvation Business Web Engineering Contract, apps/backoffice (Backoffice Foundation), apps/cashier (POS Operational Implementation), contracts/contract-lock.json (+39 more)
 
 ### Community 3 - "Agent Skills & Routing"
-Cohesion: 0.10
-Nodes (29): Graphify Skill Pointer (.claude/CLAUDE.md), digvation-debug Skill, Superpowers Systematic Debugging, digvation-feature Skill, digvation-release Skill, Remote Mutation Gate, digvation-router Skill, digvation-ui Skill (+21 more)
+Cohesion: 0.07
+Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
 ### Community 4 - "Finance, Audit & RBAC"
-Cohesion: 0.14
-Nodes (27): Audit/Activity Record (append-only, business-semantic), Audit & Activity Scope Contract, Audit Sensitive Data Rules, Cash Movement, Cashier Session Boundary, Expense Request Lifecycle, Financial Account (Cash/Bank/E-Wallet), Payment-to-Financial-Account Routing (+19 more)
+Cohesion: 0.07
+Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
 ### Community 5 - "CORE Control Plane"
-Cohesion: 0.18
-Nodes (17): CORE Service Repository Agent Contract, AddOnOffering, CO_TERM_PRORATED Add-on Billing, Paired CORE Implementation (core-v2 + digvation-core-ui), ProductCapability Compatibility, SubscriptionTerm / SubscriptionAddOn Price Snapshots, CORE UI Repository Agent Contract, Client Onboarding (Create & Provision) (+9 more)
+Cohesion: 0.22
+Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
+
+### Community 11 - "graphify reference: extra exports and benchmark"
+Cohesion: 0.22
+Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
+
+### Community 12 - "graphify reference: query, path, explain"
+Cohesion: 0.33
+Nodes (5): For /graphify explain, For /graphify path, graphify reference: query, path, explain, Step 0 — Constrained query expansion (REQUIRED before traversal), Step 1 — Traversal
+
+### Community 13 - "graphify reference: query, path, explain"
+Cohesion: 0.33
+Nodes (5): For /graphify explain, For /graphify path, graphify reference: query, path, explain, Step 0 — Constrained query expansion (REQUIRED before traversal), Step 1 — Traversal
+
+### Community 14 - "graphify reference: add a URL and watch a folder"
+Cohesion: 0.50
+Nodes (3): For /graphify add, For --watch, graphify reference: add a URL and watch a folder
+
+### Community 15 - "graphify reference: commit hook and native CLAUDE.md integration"
+Cohesion: 0.50
+Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify reference: commit hook and native CLAUDE.md integration
+
+### Community 16 - "graphify reference: incremental update and cluster-only"
+Cohesion: 0.50
+Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
+
+### Community 17 - "graphify reference: add a URL and watch a folder"
+Cohesion: 0.50
+Nodes (3): For /graphify add, For --watch, graphify reference: add a URL and watch a folder
+
+### Community 18 - "graphify reference: commit hook and native CLAUDE.md integration"
+Cohesion: 0.50
+Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify reference: commit hook and native CLAUDE.md integration
+
+### Community 19 - "graphify reference: incremental update and cluster-only"
+Cohesion: 0.50
+Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
 ## Ambiguous Edges - Review These
 - `Digvation Scope Contracts Catalog` → `Scheduling Scope Contract`  [AMBIGUOUS]
   scopes/README.md · relation: references
 
 ## Knowledge Gaps
-- **22 isolated node(s):** `Graphify Skill Pointer (.claude/CLAUDE.md)`, `start-claude.ps1`, `Superpowers Systematic Debugging`, `Business Configuration`, `UI Data-Source Abstraction` (+17 more)
+- **118 isolated node(s):** `Digvation Debugging`, `Digvation Feature Work`, `Digvation Release Gate`, `Digvation Router`, `Digvation Security Work` (+113 more)
   These have ≤1 connection - possible missing edges or undocumented components.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `Digvation Scope Contracts Catalog` and `Scheduling Scope Contract`?**
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **Why does `Ecosystem Architecture` connect `Runtime & Web Engineering` to `Security, Infra & Release`, `Agent Skills & Routing`, `CORE Control Plane`?**
-  _High betweenness centrality (0.145) - this node is a cross-community bridge._
-- **Why does `Digvation Global Agent Contract` connect `Agent Skills & Routing` to `Security, Infra & Release`, `Runtime & Web Engineering`?**
-  _High betweenness centrality (0.110) - this node is a cross-community bridge._
-- **Why does `Delivery, Git, Versioning and Deployment Standard` connect `Security, Infra & Release` to `Runtime & Web Engineering`, `Agent Skills & Routing`?**
-  _High betweenness centrality (0.041) - this node is a cross-community bridge._
-- **What connects `Graphify Skill Pointer (.claude/CLAUDE.md)`, `start-claude.ps1`, `Superpowers Systematic Debugging` to the rest of the system?**
-  _22 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Why does `Ecosystem Architecture` connect `Runtime & Web Engineering` to `Security, Infra & Release`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `Digvation Global Agent Contract` connect `Security, Infra & Release` to `Runtime & Web Engineering`?**
+  _High betweenness centrality (0.034) - this node is a cross-community bridge._
+- **Why does `Delivery, Git, Versioning and Deployment Standard` connect `Security, Infra & Release` to `Runtime & Web Engineering`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
+- **What connects `Digvation Debugging`, `Digvation Feature Work`, `Digvation Release Gate` to the rest of the system?**
+  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Commerce Domain Scopes` be split into smaller, more focused modules?**
-  _Cohesion score 0.11923076923076924 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07507914970601538 - nodes in this community are weakly interconnected._
 - **Should `Security, Infra & Release` be split into smaller, more focused modules?**
-  _Cohesion score 0.11931818181818182 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06345848757271286 - nodes in this community are weakly interconnected._
