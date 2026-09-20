@@ -1,12 +1,12 @@
 # DIGVATION_CLAUDE_API_BOOTSTRAP
-[CmdletBinding()]
-param(
-    [string]$LifecycleRoot = $PSScriptRoot,
-    [Parameter(ValueFromRemainingArguments = $true)]
-    [string[]]$ClaudeArgs
-)
+
+# Preserve every argument exactly as supplied after this script name.
+# This avoids PowerShell binding Claude CLI flags such as --model/--effort
+# to launcher-specific parameters.
+$ClaudeArgs = @($args)
 
 $ErrorActionPreference = "Stop"
+$LifecycleRoot = $PSScriptRoot
 $LifecycleRoot = (Resolve-Path -LiteralPath $LifecycleRoot).Path
 Set-Location -LiteralPath $LifecycleRoot
 
@@ -68,6 +68,9 @@ Write-Host "  - existing Codebase Memory cache/index is reused" -ForegroundColor
 Write-Host "  - Claude Code prompt caching remains managed by Claude Code/API" -ForegroundColor DarkGray
 Write-Host ""
 Write-Host "Anthropic API key: configured for this process (value hidden)." -ForegroundColor DarkGray
+if ($ClaudeArgs.Count -gt 0) {
+    Write-Host "Claude arguments: $($ClaudeArgs -join ' ')" -ForegroundColor DarkGray
+}
 Write-Host ""
 
 & claude @ClaudeArgs
