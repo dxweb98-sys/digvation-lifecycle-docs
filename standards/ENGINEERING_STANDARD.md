@@ -335,7 +335,35 @@ Do not create a new document for:
 
 Update canonical docs only when durable truth changes.
 
-## 20. Definition of clean implementation
+## 20. Feature-scoped validation
+
+Ordinary feature implementation uses the narrowest validation that proves the changed work is correct.
+
+Default rule:
+
+- test the feature/module being changed;
+- typecheck the affected app/package/module;
+- run focused lint/build checks only when they materially validate the change;
+- do not run repository-wide or workspace-wide validation merely as a precaution.
+
+Do not substitute nearby but unrelated regression suites for a missing feature test. If focused coverage does not exist, add or extend a focused test owned by the changed feature and execute it directly.
+
+Unrelated repository failures are baseline debt unless the current change caused them. Record them separately, do not fix or repeatedly rerun them, and do not broaden the feature scope because they exist.
+
+A focused test that hangs or emits no actual result is `INCONCLUSIVE`, not passed. Diagnose the focused test or harness rather than using unrelated broad suites as substitute evidence.
+
+Broad/full test suites, workspace-wide typecheck/lint/build, broad E2E, and full regression are reserved for explicit gates such as:
+
+- direct user request;
+- repository contracts that explicitly require broad validation for the current work;
+- genuinely shared infrastructure changes that cannot be validated safely through narrower consumers;
+- integration, release, staging, production, or full-regression acceptance.
+
+Feature completion alone is not a full-regression gate.
+
+Validation reports must distinguish focused checks that actually ran, actual results, baseline/unrelated failures, and deferred broad regression. Compilation alone is not evidence that feature tests passed.
+
+## 21. Definition of clean implementation
 
 A work unit is clean when:
 
