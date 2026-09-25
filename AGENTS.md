@@ -127,6 +127,72 @@ Full acceptance belongs to explicit acceptance/release gates.
 
 Never claim an unexecuted check passed.
 
+### Feature-scoped validation lock
+
+Default implementation validation is **feature-scoped**.
+
+For every feature, fix, or bounded work unit:
+
+1. run only tests directly owned by or materially affected by the changed feature/module;
+2. run only the narrowest applicable typecheck/compiler check for the changed app/package/module;
+3. run focused lint/build checks only when they materially validate the changed work;
+4. do not run repository-wide or workspace-wide validation merely as a precaution.
+
+By default, do **not** run:
+
+- full repository test suites;
+- all Jest/Vitest tests;
+- workspace-wide typecheck;
+- workspace-wide lint;
+- full monorepo builds;
+- unrelated E2E suites;
+- unrelated regression suites;
+- historical tests merely because they are nearby.
+
+Examples:
+
+- Runtime Sales feature -> Sales/correction/payment focused specs only.
+- Operational POS feature -> Operational feature tests plus Operational app typecheck only.
+- Backoffice Catalog feature -> Catalog focused tests plus Backoffice scoped typecheck only.
+
+The nearest existing test is not automatically the correct test. Do not substitute an unrelated existing test suite for a missing feature test. If the feature needs regression coverage and no focused test exists, add or extend a focused test owned by that feature and run that test directly.
+
+When an unrelated failure is encountered:
+
+- classify it as `BASELINE` / `UNRELATED` unless the changed feature actually caused it;
+- record it concisely;
+- do not fix it;
+- do not repeatedly rerun it;
+- do not broaden scope;
+- continue with feature-scoped validation.
+
+A pre-existing unrelated failure must not block manual review when the required focused validation for the current work unit passes.
+
+If a focused test hangs or produces no actual test result:
+
+- classify it as `INCONCLUSIVE`, never `PASS`;
+- diagnose that focused test or its harness;
+- do not switch to unrelated broad suites as substitute evidence.
+
+Broad/full validation is allowed only when at least one of these applies:
+
+1. the user explicitly requests it;
+2. an accepted repository contract explicitly requires it for the current work unit;
+3. the change modifies genuinely shared infrastructure whose impact cannot be validated safely through narrower consumers;
+4. the work is at an explicit integration, release, staging, production, or full-regression acceptance gate.
+
+Feature completion alone does not authorize full-suite validation.
+
+Validation reporting must state exactly:
+
+- focused tests executed;
+- focused typecheck/build executed;
+- actual results;
+- unrelated/baseline failures separately;
+- deferred full regression separately.
+
+Never report `tests passed` when only compilation passed, when the relevant feature tests were not executed, or when the test runner emitted no result.
+
 ## 6. Manual review is a real gate
 
 `READY_FOR_MANUAL_REVIEW` means:
