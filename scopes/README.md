@@ -136,7 +136,7 @@ CUSTOMER_MEMBERSHIP.md  NEXT     Shared customer + membership capability
 PROMOTION_COMMERCIAL.md NEXT     Shared promotion/commercial-rules capability
 TAX_FISCAL.md           NEXT     Shared dynamic tax/fiscal capability
 INVENTORY.md            PLANNED  Business domain boundary reserved
-WORKSHOP.md             PLANNED  Business domain boundary reserved
+WORKSHOP.md             NEXT     Business domain boundary reserved
 ```
 
 This table is descriptive. Actual repository/source reality must still be verified before implementation.
