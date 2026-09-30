@@ -27,4 +27,4 @@ core/**
 
 infra/**
 !infra/**/
-!infra/**/AGENTS.md
+!infra/**/AGENTS.md.playwright-mcp/

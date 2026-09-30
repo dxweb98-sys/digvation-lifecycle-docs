@@ -1,28 +1,26 @@
-# Graph Report - lifecycle  (2026-09-30)
+# Graph Report - lifecycle  (2026-09-20)
 
 ## Corpus Check
-- 78 files · ~69,798 words
+- 78 files · ~68,193 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 7 file(s) not represented in the graph (top: (none) 4, .example 3)
 
 ## Summary
-- 333 nodes · 519 edges · 39 communities (17 shown, 22 thin omitted)
+- 334 nodes · 519 edges · 38 communities (20 shown, 18 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 37 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2dd88250`
+- Built from commit: `1c3d09fc`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- Digvation Scope Contracts Catalog
-- Ecosystem Architecture
-- CORE Service Repository Agent Contract
-- What You Must Do When Invoked
-- What You Must Do When Invoked
-- graphify reference: extra exports and benchmark
-- digvation-router Skill
+- Commerce Domain Scopes
+- Security, Infra & Release
+- Runtime & Web Engineering
+- Agent Skills & Routing
+- Finance, Audit & RBAC
+- CORE Control Plane
 - graphify reference: extra exports and benchmark
 - graphify reference: query, path, explain
 - graphify reference: query, path, explain
@@ -50,7 +48,6 @@
 - skills/digvation-security/SKILL.md
 - skills/digvation-ui/SKILL.md
 - skills/graphify/references/extraction-spec.md
-- Digvation Business Web Engineering Contract
 
 ## God Nodes (most connected - your core abstractions)
 1. `Ecosystem Architecture` - 33 edges
@@ -65,14 +62,14 @@
 10. `Dashboard & Reporting Composition Contract` - 13 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `Authoritative Security Boundaries` --semantically_similar_to--> `POS-Specific Security Acceptance`  [INFERRED] [semantically similar]
-  .claude/skills/digvation-security/SKILL.md → standards/SECURITY_ACCEPTANCE_STANDARD.md
 - `Codebase Memory MCP Discovery Layer` --semantically_similar_to--> `graphify Knowledge Graph`  [INFERRED] [semantically similar]
   AGENTS.md → CLAUDE.md
 - `Model Cheat Sheet` --semantically_similar_to--> `Model Routing (TERRA MEDIUM / TERRA HIGH / SOL)`  [INFERRED] [semantically similar]
   standards/PROMPT_LIBRARY.md → AGENTS.md
 - `Design System Rule (@digvation/ui)` --semantically_similar_to--> `UI Authority Order`  [INFERRED] [semantically similar]
   standards/ENGINEERING_STANDARD.md → .claude/skills/digvation-ui/SKILL.md
+- `Authoritative Security Boundaries` --semantically_similar_to--> `POS-Specific Security Acceptance`  [INFERRED] [semantically similar]
+  .claude/skills/digvation-security/SKILL.md → standards/SECURITY_ACCEPTANCE_STANDARD.md
 - `Client Onboarding (Create & Provision)` --semantically_similar_to--> `Standard Client Onboarding Flow`  [INFERRED] [semantically similar]
   core/digvation-core-ui/AGENTS.md → standards/CLIENT_INSTALLATION_STANDARD.md
 
@@ -87,35 +84,31 @@
 - **Integrated Customer + Membership + Loyalty + Promotion suite** — scopes_customer_membership_customer_identity, scopes_customer_membership_membership, scopes_customer_membership_loyalty_points, scopes_customer_membership_point_ledger_entry, scopes_promotion_commercial_promotion [EXTRACTED 1.00]
 - **Entitlement-gated dashboard/reporting composition** — scopes_dashboard_reporting_composition_authority, scopes_readme_effective_entitlement_set, scopes_dashboard_reporting_domain_contribution_model, scopes_dashboard_reporting_cross_domain_report_rule [INFERRED 0.85]
 
-## Communities (39 total, 22 thin omitted)
+## Communities (38 total, 18 thin omitted)
 
-### Community 0 - "Digvation Scope Contracts Catalog"
+### Community 0 - "Commerce Domain Scopes"
 Cohesion: 0.08
 Nodes (67): Audit/Activity Record (append-only, business-semantic), Audit & Activity Scope Contract, Audit Sensitive Data Rules, Catalog Entry / Classification, Catalog Pricing Boundary, Catalog Scope Contract, Customer Identity (CUSTOMER_IDENTITY), Loyalty Points (LOYALTY_POINTS) (+59 more)
 
-### Community 1 - "Ecosystem Architecture"
+### Community 1 - "Security, Infra & Release"
+Cohesion: 0.06
+Nodes (62): Graphify Skill Pointer (.claude/CLAUDE.md), digvation-debug Skill, Superpowers Systematic Debugging, digvation-feature Skill, digvation-release Skill, Remote Mutation Gate, digvation-router Skill, digvation-security Skill (+54 more)
+
+### Community 2 - "Runtime & Web Engineering"
 Cohesion: 0.07
-Nodes (63): Digvation Global Agent Contract, Conditional Standards Reading, Documentation Creation Gate, Model Routing (TERRA MEDIUM / TERRA HIGH / SOL), No Planning Labels in Production Artifacts, Scope Is a Hard Boundary, Digvation Business Runtime Engineering Contract, Backend/Domain Ownership Classification (+55 more)
+Nodes (47): Digvation Business Runtime Engineering Contract, Backend/Domain Ownership Classification, Database and Migration Rules, Transactional and Financial Integrity, Digvation Business Web Engineering Contract, apps/backoffice (Backoffice Foundation), apps/cashier (POS Operational Implementation), contracts/contract-lock.json (+39 more)
 
-### Community 2 - "CORE Service Repository Agent Contract"
-Cohesion: 0.24
-Nodes (14): CORE Service Repository Agent Contract, AddOnOffering, CO_TERM_PRORATED Add-on Billing, Paired CORE Implementation (core-v2 + digvation-core-ui), ProductCapability Compatibility, SubscriptionTerm / SubscriptionAddOn Price Snapshots, CORE UI Repository Agent Contract, UI Data-Source Abstraction (+6 more)
-
-### Community 3 - "What You Must Do When Invoked"
-Cohesion: 0.07
-Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
-
-### Community 4 - "What You Must Do When Invoked"
+### Community 3 - "Agent Skills & Routing"
 Cohesion: 0.07
 Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
 
-### Community 5 - "graphify reference: extra exports and benchmark"
+### Community 4 - "Finance, Audit & RBAC"
+Cohesion: 0.07
+Nodes (26): For /graphify add and --watch, For /graphify query, For the commit hook and native CLAUDE.md integration, For --update and --cluster-only, /graphify, Honesty Rules, Interpreter guard for subcommands, Part A - Structural extraction for code files (+18 more)
+
+### Community 5 - "CORE Control Plane"
 Cohesion: 0.22
 Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only if --wiki flag), Step 7 - Neo4j export (only if --neo4j or --neo4j-push flag), Step 7a - FalkorDB export (only if --falkordb or --falkordb-push flag), Step 7b - SVG export (only if --svg flag), Step 7c - GraphML export (only if --graphml flag), Step 7d - MCP server (only if --mcp flag), Step 8 - Token reduction benchmark (only if total_words > 5000)
-
-### Community 9 - "digvation-router Skill"
-Cohesion: 0.13
-Nodes (17): Graphify Skill Pointer (.claude/CLAUDE.md), digvation-debug Skill, Superpowers Systematic Debugging, digvation-feature Skill, digvation-release Skill, Remote Mutation Gate, digvation-router Skill, digvation-security Skill (+9 more)
 
 ### Community 11 - "graphify reference: extra exports and benchmark"
 Cohesion: 0.22
@@ -153,33 +146,29 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 38 - "Digvation Business Web Engineering Contract"
-Cohesion: 0.19
-Nodes (14): digvation-ui Skill, UI Authority Order, ui-ux-pro-max / uiuxpromax Skill, Automatic Specialist Skill Routing, Digvation Business Web Engineering Contract, apps/backoffice (Backoffice Foundation), apps/cashier (POS Operational Implementation), contracts/contract-lock.json (+6 more)
-
 ## Ambiguous Edges - Review These
 - `Digvation Scope Contracts Catalog` → `Scheduling Scope Contract`  [AMBIGUOUS]
   scopes/README.md · relation: references
 
 ## Knowledge Gaps
-- **117 isolated node(s):** `Digvation Debugging`, `Digvation Feature Work`, `Digvation Release Gate`, `Digvation Router`, `Digvation Security Work` (+112 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 167 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **22 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **118 isolated node(s):** `Digvation Debugging`, `Digvation Feature Work`, `Digvation Release Gate`, `Digvation Router`, `Digvation Security Work` (+113 more)
+  These have ≤1 connection - possible missing edges or undocumented components.
+- **18 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **What is the exact relationship between `Digvation Scope Contracts Catalog` and `Scheduling Scope Contract`?**
   _Edge tagged AMBIGUOUS (relation: references) - confidence is low._
-- **Why does `Ecosystem Architecture` connect `Ecosystem Architecture` to `CORE Service Repository Agent Contract`, `Digvation Business Web Engineering Contract`?**
-  _High betweenness centrality (0.045) - this node is a cross-community bridge._
-- **Why does `Digvation Global Agent Contract` connect `Ecosystem Architecture` to `digvation-router Skill`, `Digvation Business Web Engineering Contract`?**
+- **Why does `Ecosystem Architecture` connect `Runtime & Web Engineering` to `Security, Infra & Release`?**
+  _High betweenness centrality (0.044) - this node is a cross-community bridge._
+- **Why does `Digvation Global Agent Contract` connect `Security, Infra & Release` to `Runtime & Web Engineering`?**
   _High betweenness centrality (0.034) - this node is a cross-community bridge._
-- **Why does `Delivery, Git, Versioning and Deployment Standard` connect `Ecosystem Architecture` to `digvation-router Skill`?**
-  _High betweenness centrality (0.013) - this node is a cross-community bridge._
+- **Why does `Delivery, Git, Versioning and Deployment Standard` connect `Security, Infra & Release` to `Runtime & Web Engineering`?**
+  _High betweenness centrality (0.012) - this node is a cross-community bridge._
 - **What connects `Digvation Debugging`, `Digvation Feature Work`, `Digvation Release Gate` to the rest of the system?**
-  _117 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Digvation Scope Contracts Catalog` be split into smaller, more focused modules?**
+  _118 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Commerce Domain Scopes` be split into smaller, more focused modules?**
   _Cohesion score 0.07507914970601538 - nodes in this community are weakly interconnected._
-- **Should `Ecosystem Architecture` be split into smaller, more focused modules?**
-  _Cohesion score 0.06810035842293907 - nodes in this community are weakly interconnected._
+- **Should `Security, Infra & Release` be split into smaller, more focused modules?**
+  _Cohesion score 0.06345848757271286 - nodes in this community are weakly interconnected._
