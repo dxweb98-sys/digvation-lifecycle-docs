@@ -13,7 +13,7 @@ Finance / Financial Operations is an optional shared business capability. Its ca
 FINANCE_OPERATIONS
 ```
 
-A product, contract, or SaaS package may bundle Finance or sell it as an add-on, but CORE/control-plane must resolve that packaging into the effective entitlement set. Runtime and frontend behavior must consume the resolved capability rather than infer availability from package name, business type, repository name, deployment mode, dedicated infrastructure, white-label branding, or source-code presence.
+A product, contract, or SaaS package may bundle Finance or sell it as an add-on. CORE remains the central control-plane resolution authority; current Dedicated-first Installations may use the explicit local effective entitlement configuration defined in [ECOSYSTEM_ARCHITECTURE.md](../standards/ECOSYSTEM_ARCHITECTURE.md). Runtime and frontend behavior must consume the resolved capability rather than infer availability from package name, business type, repository name, deployment mode, dedicated infrastructure, white-label branding, or source-code presence.
 
 ## Purpose
 

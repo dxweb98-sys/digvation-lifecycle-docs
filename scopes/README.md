@@ -20,10 +20,26 @@ Use one of these labels in `Kind`:
 
 ## Status vocabulary
 
-- `ACTIVE` — scope exists and is currently part of the Digvation platform.
+- `ACTIVE` — scope exists and is currently part of the Digvation platform; this is not a certification of every conceptual feature.
+- `PARTIAL` — an accepted implementation subset exists, while the wider contract still contains undelivered/deferred capabilities. Use the scope's verified delivery section to identify the supported subset.
 - `NEXT` — next intended scope, but implementation still requires an explicit task.
 - `PLANNED` — boundary is reserved/understood, but detailed feature scope is not yet locked.
 - `DRAFT` — still being discussed; do not use as implementation authority.
+
+### Delivery and availability evidence
+
+Keep these facts separate:
+
+| Fact | Evidence / meaning |
+| --- | --- |
+| Durable scope status | Domain/foundation/capability maturity and ownership; never roadmap authorization. |
+| Implemented capability | Named behavior verified in source at an exact repository/branch/SHA. |
+| Accepted integration | Accepted/merged source in `dev` or `dev-workshop`; this alone does not prove a release. |
+| Release / deployment | Accepted version/artifact plus release/Installation evidence. If unavailable, record `NOT_VERIFIED`, rather than guessing deployed or unreleased. |
+| Client enabled/disabled state | The Installation's effective entitlements and current runtime/session projection, independent from scope status. |
+| Future / deferred | Domain envelope only; requires a separately authorized work unit. |
+
+The verified delivery sections below were reconciled on 2026-10-16 (Asia/Jakarta). They distinguish accepted source from release/deployment and do not certify live client configuration. `PARTIAL` does not mean the listed implemented capabilities are unusable; it prevents claiming the whole wider envelope is complete.
 
 ## Entitlement and commercial availability
 
@@ -44,7 +60,7 @@ Use `Commercial Packaging` only as a packaging hint, not authorization:
 - `BUNDLED_OR_OPTIONAL` — may be bundled by a product/plan or enabled explicitly;
 - `N/A` — not a standalone commercial item.
 
-The runtime/frontend must consume the **effective entitlement set** resolved by CORE/control-plane commercial configuration. A SaaS package may bundle products/capabilities, but business runtimes must not infer package contents from a plan name.
+The runtime/frontend must consume the **effective entitlement set** from the supported trusted source. CORE remains the central control-plane authority; current Dedicated-first Installations may use explicit deployment manifests or flat local configuration without synchronous CORE dependency. [ECOSYSTEM_ARCHITECTURE.md](../standards/ECOSYSTEM_ARCHITECTURE.md) owns those modes and compatibility rules. A SaaS package may bundle products/capabilities, but business runtimes must not infer package contents from a plan name.
 
 Example:
 
@@ -118,26 +134,26 @@ For ordinary implementation, read only:
 
 Then use Codebase Memory MCP to map the scope contract to current repository reality and verify important findings against source.
 
-For frontend/UI work, use the installed `uiuxpromax` UI/UX skill automatically and preserve the existing Digvation Design System as the implementation authority.
+For frontend/UI work, discover, read, and apply both `frontend-design` and `ui-ux-pro-max` when available, as required by root `AGENTS.md`, and preserve the existing Digvation Design System as the implementation authority.
 
 ## Current scope catalog
 
-```text
-POS.md                  ACTIVE   Business domain
-ORGANIZATION_LOCATION.md ACTIVE   Shared organization/location foundation
-CATALOG.md               ACTIVE   Shared catalog foundation
-WORKFORCE.md             ACTIVE   Shared workforce foundation
-IDENTITY_ACCESS.md       ACTIVE   Shared account/identity/RBAC foundation
-OPERATIONAL_ACCESS.md    ACTIVE   Shared operational location-access capability
-AUDIT_ACTIVITY.md        ACTIVE   Shared audit/activity foundation
-DASHBOARD_REPORTING.md   ACTIVE   Shared projection/composition contract
-FINANCE_OPERATIONS.md    ACTIVE   Shared finance/financial-operations capability
-CUSTOMER_MEMBERSHIP.md  NEXT     Shared customer + membership capability
-PROMOTION_COMMERCIAL.md NEXT     Shared promotion/commercial-rules capability
-TAX_FISCAL.md           NEXT     Shared dynamic tax/fiscal capability
-INVENTORY.md            PLANNED  Business domain boundary reserved
-WORKSHOP.md             NEXT     Business domain boundary reserved
-```
+| Scope contract | Status | Current boundary |
+| --- | --- | --- |
+| [POS.md](POS.md) | `ACTIVE` | Business domain. |
+| [ORGANIZATION_LOCATION.md](ORGANIZATION_LOCATION.md) | `ACTIVE` | Shared organization/location foundation. |
+| [CATALOG.md](CATALOG.md) | `ACTIVE` | Shared catalog foundation, including the verified Service composition subset. |
+| [WORKFORCE.md](WORKFORCE.md) | `ACTIVE` | Shared workforce foundation. |
+| [IDENTITY_ACCESS.md](IDENTITY_ACCESS.md) | `ACTIVE` | Shared account/identity/RBAC foundation. |
+| [OPERATIONAL_ACCESS.md](OPERATIONAL_ACCESS.md) | `ACTIVE` | Shared location-access authority. |
+| [AUDIT_ACTIVITY.md](AUDIT_ACTIVITY.md) | `ACTIVE` | Shared audit/activity foundation. |
+| [DASHBOARD_REPORTING.md](DASHBOARD_REPORTING.md) | `ACTIVE` | Shared projection/composition contract. |
+| [FINANCE_OPERATIONS.md](FINANCE_OPERATIONS.md) | `ACTIVE` | Shared financial-operations capability. |
+| [CUSTOMER_MEMBERSHIP.md](CUSTOMER_MEMBERSHIP.md) | `PARTIAL` | Customer directory, Membership and Loyalty subset accepted in `dev`; wider suite remains bounded. |
+| [PROMOTION_COMMERCIAL.md](PROMOTION_COMMERCIAL.md) | `PARTIAL` | Monetary discounts and member eligibility accepted in `dev`; campaign points modifiers remain deferred. |
+| [TAX_FISCAL.md](TAX_FISCAL.md) | `PARTIAL` | Business-level tax configuration and transaction/report facts accepted in `dev`; wider fiscal engine remains future. |
+| [INVENTORY.md](INVENTORY.md) | `PLANNED` | Business domain boundary reserved. |
+| [WORKSHOP.md](WORKSHOP.md) | `PARTIAL` | Work Order execution/billing-validation subset accepted in `dev-workshop`; wider integrations remain future. |
 
 This table is descriptive. Actual repository/source reality must still be verified before implementation.
 

@@ -1,9 +1,17 @@
 # Workshop Scope Contract
 
 Kind: `BUSINESS_DOMAIN`
-Status: `NEXT`
+Status: `PARTIAL`
 Entitlement Class: `PRODUCT`
 Commercial Packaging: `PRODUCT`
+
+## Verified Delivery State
+
+Workshop has accepted implementation in the separate `dev-workshop` lane: customer/vehicle intake, Work Order queue/lifecycle, mechanic assignment, initial Service/Product lines, line adjustments, and billing calculation/validation. It is not merely a reserved domain, and it is not a fully delivered finance/invoicing/reporting suite.
+
+Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `3777e99a49a03470aea9ff71220671260dbfd61c` [Workshop controller](https://github.com/dxweb98-sys/digvation-business-runtime/blob/3777e99a49a03470aea9ff71220671260dbfd61c/src/modules/workshop/workshop.controller.ts), [work lifecycle](https://github.com/dxweb98-sys/digvation-business-runtime/blob/3777e99a49a03470aea9ff71220671260dbfd61c/src/modules/workshop/workshop-status.policy.ts), and [billing policy](https://github.com/dxweb98-sys/digvation-business-runtime/blob/3777e99a49a03470aea9ff71220671260dbfd61c/src/modules/workshop/workshop-billing.policy.ts); Web `7095cea37b63ec8dd4f4e5e93eae76f2f8bd788f` [access](https://github.com/dxweb98-sys/digvation-business-web/blob/7095cea37b63ec8dd4f4e5e93eae76f2f8bd788f/apps/operational/src/modules/workshop/work-orders/model/work-order-access.ts) and [billing API](https://github.com/dxweb98-sys/digvation-business-web/blob/7095cea37b63ec8dd4f4e5e93eae76f2f8bd788f/apps/operational/src/modules/workshop/work-orders/api/workshop-billing-api.ts).
+
+This evidence is branch-specific: it does not imply Workshop is in the current POS `dev` lane or released to production. Release/deployment and live client grants: `NOT_VERIFIED`. `WORKSHOP` product entitlement, permissions, and allowed-location context still control availability. Wider ownership/contribution sections below are domain envelope, not proof that every integration is delivered.
 
 ## Purpose
 
@@ -113,22 +121,18 @@ Cross-domain reporting must use explicit projection or integration contracts rat
 
 ## Current Scope
 
-The current Workshop delivery scope establishes the Workshop MVP domain boundary around:
+The verified accepted implementation subset is:
 
-- Vehicle context required for Workshop work;
-- Workshop Work Order and its lifecycle;
-- Work Order job and execution context;
-- Workshop mechanic eligibility/profile;
-- mechanic/technician assignment and workload;
-- service and part usage within a Work Order;
-- Workshop operational work status and timeline;
-- Workshop-specific billing context;
-- Workshop Invoice semantics/presentation responsibility where applicable;
-- Workshop completion and cancellation semantics;
-- Workshop contribution to the shared Backoffice and Operational experiences;
-- Workshop-authoritative Dashboard and Report projections required by this scope.
+- canonical Customer reference and Workshop-owned Vehicle intake;
+- Work Order list/queue/detail in the shared Operational experience;
+- lifecycle transitions for waiting, assignment, in-progress, paused, completed, and cancelled work under Runtime policy;
+- mechanic eligibility/assignment referencing canonical Employee authority;
+- initial Work Order Service/Product line selection and accepted price/quantity snapshots;
+- line adjustments through Workshop-owned commands;
+- billing draft calculation from effective lines and Business tax, explicit validation, and revalidation when authoritative billing facts change;
+- `WORKSHOP` product/permission/location enforcement and shared Backoffice mechanic administration.
 
-This scope defines durable domain responsibility only. It does not define physical tables, DTOs, endpoints, exact state enums, transport contracts, or implementation architecture for later implementation units.
+Billing validation is not payment collection, invoice issuance, stock posting, or proof of completed Workshop financial integration. Wider workload analytics, Dashboard/Report contributions, and invoice presentation remain domain-owned envelope until explicitly implemented and accepted. Preserve current repository DTOs/state policies rather than deriving a new physical schema or API from this summary.
 
 ## Deferred / Future
 
@@ -141,6 +145,8 @@ The following remain explicitly deferred until activated by dedicated scope/task
 - Scheduling / Appointment integration;
 - advanced Inventory integration;
 - Workshop notification automation.
+- full payment collection/financial posting and Invoice issuance beyond the verified billing-validation slice;
+- Workshop-specific Dashboard/Report projections and advanced workload analytics beyond the verified slice.
 
 Deferred concepts are part of the wider Workshop domain envelope only and are not implementation authorization.
 

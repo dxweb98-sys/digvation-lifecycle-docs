@@ -1,5 +1,10 @@
 $ErrorActionPreference = "Stop"
 
+# Pastikan kontrak global tersedia sebelum menyiapkan session Codex.
+if (-not (Test-Path -LiteralPath (Join-Path $PSScriptRoot "AGENTS.md") -PathType Leaf)) {
+    throw "Root AGENTS.md tidak ditemukan. Lengkapi workspace Lifecycle sebelum menjalankan Codex."
+}
+
 $cbmDir = "$env:LOCALAPPDATA\Programs\codebase-memory-mcp"
 $cbmExe = Join-Path $cbmDir "codebase-memory-mcp.exe"
 

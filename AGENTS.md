@@ -346,6 +346,32 @@ Validation reporting must state exactly:
 
 Never report `tests passed` when only compilation passed, when the relevant feature tests were not executed, or when the test runner emitted no result.
 
+### VERIFY_OR_IMPLEMENT — default for authorized implementation
+
+For clearly scoped implementation or bug-fix tasks with explicit acceptance criteria and established implementation authority, use:
+
+**VERIFY → IMPLEMENT ONLY MISSING DELTAS → VALIDATE → REPORT**
+
+Apply this to feature completion, specified bug fixes, missing validation or API/UI wiring, regression coverage, and bounded integration gaps. An explicitly requested investigation-only, audit-only, research-only, or architecture-decision task retains its requested boundary.
+
+Verify each requirement against the actual relevant behavior and classify it:
+
+| Classification | Required action |
+| --- | --- |
+| `ALREADY_PRESENT` | Verify the behavior using relevant source and evidence; preserve it without modification/refactor and report the evidence. |
+| `PARTIALLY_PRESENT` | Identify the exact missing behavior and implement only that delta, preserving the correct portion. |
+| `MISSING` | Implement the smallest coherent in-scope solution, reusing existing architecture, contracts, components, and tests. |
+| `BLOCKED` | Stop the dependent action when it needs a new product/architecture decision, missing authority, unapproved migration execution, destructive action, or another restricted operation; request only the necessary decision/approval. |
+| `NOT_APPLICABLE` | Leave excluded or unrelated behavior unchanged. |
+
+A matching symbol, DTO field, or unrelated passing test does not establish `ALREADY_PRESENT`; trace the required behavior and use evidence that actually covers the acceptance criterion. When implementation is already authorized, verification must lead directly to its missing in-scope deltas, without a separate review-only report/wait cycle or repeated approval requests for ordinary fixes. Validate only the affected behavior under the feature-scoped validation rules above and report the relevant delta.
+
+This execution pattern grants no additional authority. All existing scope, domain ownership, discovery/skill, research, Git/database, approval, and stop-condition rules in this contract remain in force. Verification permits implementation only within the user's existing authorized scope and never activates an excluded requirement or restricted operation.
+
+Report a concise `Requirement | Status | Evidence / Change` table using these classifications and the actual implementation/validation outcome. Include changed files (if any), focused validation and actual results, preserved behavior, remaining blockers, and Git/DB operation status. Do not repeat the full investigation.
+
+Honor an explicit task-specific stop state first. Otherwise, use `NO_CHANGES_REQUIRED` when every applicable requirement is verified as already satisfied and no changes are needed; when changes were required and validation is complete, use `READY_FOR_MANUAL_REVIEW` under the normal manual-review gate. Neither outcome grants permission for further Git, database, PR, merge, release, or deployment operations.
+
 ## 6. Manual review is a real gate
 
 `READY_FOR_MANUAL_REVIEW` means:

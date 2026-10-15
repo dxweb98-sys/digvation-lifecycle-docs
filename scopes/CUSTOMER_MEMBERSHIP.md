@@ -1,9 +1,17 @@
 # Customer, Membership & Loyalty Scope Contract
 
 Kind: `SHARED_BUSINESS_FOUNDATION` + `SHARED_BUSINESS_CAPABILITY`  
-Status: `NEXT`  
+Status: `PARTIAL`
 Entitlement Class: `PLATFORM_FOUNDATION` + `CAPABILITY`  
 Commercial Packaging: customer identity foundation + bundled/optional Membership + Loyalty capability
+
+## Verified Delivery State
+
+The Customer directory, Membership enrollment/management, Loyalty configuration/ledger/earn/redeem, finalized-Sale compensation, member import/opening points/manual adjustment, and member portal have accepted source in `dev`. This is a delivered subset of the wider integrated suite; it does not imply campaign point modifiers or every conceptual configuration below is implemented.
+
+Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `1190ec6d9b21628a23af78e299beb576c1f75c27` [enrollment](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/membership/membership.dto.ts), [earning/configuration](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/loyalty/loyalty-configuration.types.ts), [ledger facts](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/loyalty/loyalty-ledger.types.ts), and [member portal](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/member-portal/member-portal.controller.ts); Web `48341a9949f04f048d39e628ab33605b82dcea25` [Loyalty configuration](https://github.com/dxweb98-sys/digvation-business-web/blob/48341a9949f04f048d39e628ab33605b82dcea25/apps/backoffice/src/modules/loyalty/loyalty-configuration-model.ts) and accepted [member administration change](https://github.com/dxweb98-sys/digvation-business-web/commit/555a09044cea30db97204269a47ea44f28ff6515).
+
+Release/deployment: `NOT_VERIFIED` by this reconciliation. Client enabled/disabled state is separate: Customer identity remains reusable, and Membership/Loyalty require their own effective grants and permissions. Do not infer live availability from `PARTIAL`, source presence, or commercial bundling. Wider suite behavior below is an envelope unless identified in `Current Scope` as implemented.
 
 ## Purpose
 
@@ -127,6 +135,8 @@ The canonical member number is backend-authoritative.
 
 Membership may be enrolled from authorized Backoffice or Operational/POS flows.
 
+Current new-Member enrollment uses name and phone, or references an existing canonical Customer. NIK is not part of the current enrollment DTO. Preserve the accepted phone normalization contract and backend-authoritative member identity.
+
 Examples:
 
 ```text
@@ -190,7 +200,9 @@ Current ledger event concepts:
 - `REDEEM`
 - `EARN_REVERSAL`
 - `REDEEM_REVERSAL`
-- `ADJUSTMENT` only when an explicitly permitted administrative correction is implemented
+- `OPENING_BALANCE`
+- `IMPORT_POINTS`
+- `MANUAL_ADJUSTMENT` with actor/reason and the accepted administrative permission
 
 Accepted behavior:
 
@@ -210,7 +222,14 @@ A cached/materialized balance may exist for performance, but the ledger remains 
 
 Loyalty Points provides a tenant-level default earning configuration.
 
-Current default model:
+Current Runtime supports exactly one earning mode per Sale:
+
+- `PER_ITEM` (compatibility default): tenant default behavior is `FIXED` or `EXCLUDED`, with a fixed-points-per-unit value and optional item overrides.
+- `TRANSACTION_TOTAL`: the configured transaction amount/points step determines spend-based earning. Item earning rules do not stack with this mode.
+
+The independent `earnWhileRedeemingPolicy` selects `EARN_WHEN_REDEEMING` or `NO_EARN_WHEN_REDEEMING` (compatibility default). Do not silently enable both modes or imply that every Sale earns while redeeming.
+
+For `TRANSACTION_TOTAL`, the spend-based model is:
 
 ```text
 Spend X currency units
@@ -263,20 +282,17 @@ The exact monetary projection must use the accepted POS/transaction contract at 
 
 Loyalty may target Catalog entries but does not own Catalog.
 
-Current first checkpoint supports:
+Within `PER_ITEM`, current configuration supports:
 
-### 1. Default Spend Rule
+### 1. Tenant Default Item Rule
 
-An eligible Catalog item/service uses the tenant default earning rule.
+An eligible Catalog item/service without an override uses the tenant default `FIXED` points-per-unit or `EXCLUDED` behavior.
 
 Example:
 
 ```text
-Default:
-Rp10.000 = 1 point
-
-Haircut Rp50.000
--> 5 points
+Default: FIXED 5 points per unit
+Haircut quantity 1 -> 5 points
 ```
 
 ### 2. Fixed Point Override Per Catalog Entry
@@ -305,21 +321,21 @@ Gift Card
 
 ### Rule Precedence
 
-Current precedence:
+Current `PER_ITEM` precedence:
 
 ```text
 Catalog-specific Loyalty rule
-    -> if FIXED_POINTS, apply fixed rule
+    -> if FIXED, apply fixed rule
     -> if EXCLUDED, earn zero normal points
     -> otherwise
-Default Spend Rule
+Tenant Default Item Rule
 ```
 
-Advanced category/tag/classification rules are deferred unless explicitly activated.
+`TRANSACTION_TOTAL` instead uses its transaction-level step rule. Advanced category/tag/classification rules are deferred unless explicitly activated.
 
 ## Multiple Quantities
 
-For `FIXED_POINTS`:
+For `FIXED`:
 
 ```text
 earnedPoints =
@@ -341,7 +357,7 @@ Normal points are not issued when an item is merely:
 Current POS integration rule:
 
 ```text
-Sale reaches accepted completed/paid business outcome
+Sale reaches FINALIZED under the accepted POS contract
     -> Loyalty receives authoritative sale reference/outcome
     -> Loyalty evaluates earning
     -> ledger EARN is recorded
@@ -367,7 +383,7 @@ REFUND-001
 -10 EARN_REVERSAL
 ```
 
-Partial refunds reverse only the authoritative loyalty outcome attributable to the refunded portion according to the accepted POS refund contract.
+The verified Sale reversal command is a finalized-Sale compensation flow, not authorization for a new partial-refund engine. If partial refunds are activated later, reverse only the authoritative loyalty outcome attributable to the refunded portion under an explicitly accepted POS contract.
 
 If redeemed points must be restored because a transaction is reversed, use `REDEEM_REVERSAL` or equivalent repository-consistent vocabulary.
 
@@ -377,7 +393,7 @@ Do not silently recalculate historical points using today's rules.
 
 Loyalty Points provides tenant-level redemption configuration.
 
-Current model:
+Current configuration exposes the currency value of one point (`pointValue`); the following conversion is an equivalent business presentation:
 
 ```text
 A points = B currency value
@@ -389,20 +405,7 @@ Example:
 10 points = Rp10.000
 ```
 
-Current configurable constraints:
-
-- conversion unit;
-- minimum points per redemption;
-- maximum redemption percentage of the eligible transaction value;
-- enabled/disabled redemption.
-
-Example:
-
-```text
-10 points = Rp10.000
-minimum redemption = 10 points
-maximum redemption = 50% of eligible transaction value
-```
+Current requests carry a positive points amount; Runtime bounds redemption by the eligible pre-tax Sale amount and available balance. Capability availability is distinct from the configured point value. A separately configurable minimum, maximum percentage, or redemption toggle is not established by the verified configuration contract; those remain future configuration envelope, not delivered settings.
 
 All redemption math is backend-authoritative.
 
@@ -413,8 +416,7 @@ Runtime validates:
 - member is active;
 - Loyalty Points capability is active;
 - sufficient point balance;
-- minimum redemption;
-- maximum redemption;
+- positive requested points and the eligible pre-tax amount bound;
 - transaction is eligible;
 - requested redemption has not already been consumed;
 - tenant/location/permission context where applicable.
@@ -435,7 +437,7 @@ Loyalty provides current balance + redeemable outcome
 Authorized redemption request
         |
         v
-Loyalty validates/reserves or records redemption according to transaction contract
+Runtime validates redemption through the accepted Sale contract
         |
         v
 POS completes authoritative Sale/payment flow
@@ -444,7 +446,7 @@ POS completes authoritative Sale/payment flow
 Loyalty finalizes historical ledger references
 ```
 
-The exact transactional consistency strategy must be designed against current POS Runtime reality before implementation.
+Preserve the accepted Runtime Sale/finalization consistency and idempotency strategy. Do not redesign it from this conceptual flow.
 
 Loyalty must not become POS payment authority.
 
@@ -465,6 +467,8 @@ Examples:
 - point balance/ledger.
 
 ### Promotion Owns Temporary Modifiers
+
+Monetary member offers are implemented; bonus-point/multiplier and temporary member-price examples describe the wider envelope and are not current delivered Loyalty modifiers.
 
 Examples:
 
@@ -579,12 +583,13 @@ Member spend or transaction performance must use explicit POS/domain projections
 
 ## Current Scope
 
-The current locked Customer/Membership/Loyalty checkpoint includes:
+The verified accepted subset includes:
 
 ### Customer
 
 - canonical customer identity;
 - basic customer management required for Membership/POS integration.
+- canonical customer directory lookup/pagination and reuse rather than a separate Member customer identity.
 
 ### Membership
 
@@ -595,32 +600,30 @@ The current locked Customer/Membership/Loyalty checkpoint includes:
 - member lookup/status;
 - Backoffice management;
 - Operational/POS identification/enrollment when permitted.
+- name/phone enrollment without NIK, existing-customer enrollment, and accepted import support.
+- phone/WhatsApp-OTP member portal with summary, points, and transaction views; this does not imply a general customer app.
 
 ### Loyalty Points
 
 - optional capability-aware points feature;
 - immutable ledger;
 - balance;
-- default spend-based earning rule;
+- mutually exclusive `PER_ITEM` and `TRANSACTION_TOTAL` earning modes;
+- tenant default `FIXED` / `EXCLUDED` behavior and transaction amount/points steps;
 - per-Catalog-entry fixed point override;
 - per-Catalog-entry earning exclusion;
-- earn after accepted completed POS Sale outcome;
+- earn after accepted `FINALIZED` POS Sale outcome;
 - idempotent Sale earn integration;
-- refund/void earning reversal;
+- finalized-Sale reversal with compensating earn/redeem facts;
 - configurable redemption conversion;
-- minimum redemption;
-- maximum redemption percentage;
+- Runtime validation of requested points, available balance, and eligible pre-tax amount;
 - POS redemption integration;
 - points history.
+- opening balances, legacy import credit, and permission-controlled manual point adjustment with actor/reason history.
 
 ### Integrated Promotion Relationship
 
-Promotion may:
-
-- target members;
-- provide temporary member benefits;
-- add bonus points;
-- apply a temporary point multiplier.
+Implemented Promotion may target active members for monetary discounts. Loyalty bonus points and temporary point multipliers remain deferred; integration boundaries do not prove those benefit types exist in Runtime.
 
 Promotion remains governed by `PROMOTION_COMMERCIAL.md`.
 
@@ -643,9 +646,11 @@ Unless explicitly activated:
 - advanced segmentation;
 - category/tag/classification earning rules;
 - complex point wallets;
+- separately configurable minimum/maximum-percentage redemption settings beyond the current point-value and Sale-bound contract;
+- Promotion bonus-point/multiplier integration;
 - external loyalty providers;
 - cross-tenant loyalty;
-- customer self-service portal/app;
+- a general customer self-service app beyond the implemented member portal;
 - advanced adjustment/approval workflows.
 
 ## Integration Rules
@@ -674,4 +679,4 @@ This scope locks business/domain behavior only.
 
 It does not authorize implementation by itself.
 
-Implementation must begin only through an explicit work unit after the current Operational baseline is accepted, unless the user explicitly changes that priority.
+Further implementation requires an explicit work unit against the latest accepted baseline. Do not restart already accepted features or activate the wider suite/deferred envelope from this contract alone.

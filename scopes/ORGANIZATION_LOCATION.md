@@ -152,6 +152,14 @@ Current implementation authority must be discovered from repository reality beca
 
 When touched, existing accepted location data/behavior should be re-homed or reused rather than duplicated.
 
+### Multi-Branch availability
+
+`MULTI_BRANCH` is an optional capability, independent from the existence of the main Branch/Location and from account-to-location access. A new single-location Dedicated Installation must explicitly configure it OFF rather than rely on a permissive development sample. Current modern manifests use `capabilities.ORGANIZATION.MULTI_BRANCH`; legacy compatibility is defined in [ECOSYSTEM_ARCHITECTURE.md](../standards/ECOSYSTEM_ARCHITECTURE.md).
+
+With the capability OFF, Runtime rejects creation of another location once one exists and rejects activation of another location while another active one exists with `403 ENTITLEMENT_REQUIRED`. Existing location identity/history is retained. ON does not grant access to every location: Owner retains organization-wide scope subject to domain permissions; Manager and other non-Owner accounts remain assignment-based, including Backoffice lists and detail/mutation access. [OPERATIONAL_ACCESS.md](OPERATIONAL_ACCESS.md) remains the account-location authority.
+
+Evidence: Runtime [location enforcement](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/infrastructure/database/prisma-locations.repository.ts), accepted Runtime [PR #113](https://github.com/dxweb98-sys/digvation-business-runtime/pull/113), and Web [PR #148](https://github.com/dxweb98-sys/digvation-business-web/pull/148). Development/legacy defaults are not a claim that every deployed Dedicated client is configured OFF; actual grants and release state must be verified separately.
+
 ## Deferred / Future
 
 - complex enterprise organization graphs;

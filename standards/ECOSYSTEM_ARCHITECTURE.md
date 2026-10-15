@@ -289,7 +289,7 @@ POS retains Sale, checkout, tender selection, payment execution/result, receipt,
 
 POS, Workshop, and future domains integrate with Finance through explicit application contracts, ports, APIs, or events. They must not access Finance repositories or tables directly, and Finance must not take ownership of their originating transactions.
 
-Finance availability is controlled by the effective `FINANCE_OPERATIONS` capability entitlement resolved by CORE. SaaS package names, deployment mode, branding, repository placement, and source-code presence are not runtime authorization.
+Finance availability is controlled by the effective `FINANCE_OPERATIONS` capability entitlement. Its trusted source follows the Dedicated-first or CORE-managed mode below. SaaS package names, deployment mode, branding, repository placement, and source-code presence are not runtime authorization.
 
 Finance contributes modules to shared Backoffice and, only where genuine live financial work is scoped, may contribute to Operational. It does not create a permanent standalone application by default.
 
@@ -311,6 +311,8 @@ Canonical rules:
 - one permitted location should auto-resolve without forcing a selector;
 - multiple permitted locations may be selected/switched only from the authorized set;
 - backend authorization remains authoritative even when the UI hides the selector for a single-location user.
+
+The same permitted-location boundary applies to Backoffice branch lookup and management: Owner retains organization-wide scope subject to domain permissions; Manager and other non-Owner accounts see and act only within assigned locations. A `MULTI_BRANCH` grant allows the multi-location business shape; it never grants an account access to those locations.
 
 Use `scopes/OPERATIONAL_ACCESS.md` for the durable access contract.
 
@@ -361,7 +363,7 @@ The durable detailed contract lives in `scopes/DASHBOARD_REPORTING.md`.
 
 Tax/Fiscal is a shared business capability that may be consumed by POS, Workshop, and future domains. Do not implement separate drifting tax engines per domain.
 
-Tax rule evaluation is dynamic and may depend on authoritative context such as:
+The wider Tax/Fiscal envelope may evaluate authoritative context such as:
 
 - client/tenant;
 - location/jurisdiction;
@@ -371,7 +373,7 @@ Tax rule evaluation is dynamic and may depend on authoritative context such as:
 - effective date/time;
 - additional customer/fiscal classification only when explicitly defined.
 
-Tax has its own Backoffice configuration surface. The configuration shown to a client must follow the client's enabled business domains, available catalog classifications, location/jurisdiction context, and permission rather than exposing every global rule.
+The implemented POS baseline uses tenant-level Business Configuration for tax enabled/rate/version and captured transaction tax facts. It does not require per-item tax mapping or a jurisdiction engine. The broader context/rule envelope is not a claim of implementation; see `scopes/TAX_FISCAL.md` for the verified subset. Configuration shown to a client must follow entitled domains/capabilities and permission rather than exposing every possible future rule.
 
 Tax does not own the business catalog. Catalog/domain authorities expose stable tax-relevant classifications; Tax/Fiscal owns the reusable rule/configuration/evaluation semantics.
 
@@ -486,6 +488,20 @@ CORE is primarily used for:
 
 Runtime must retain an accepted entitlement/runtime-context mechanism so ordinary business operation does not unnecessarily fail when CORE is temporarily unavailable.
 
+### Dedicated-first entitlement authority
+
+CORE remains the future control-plane authority for centrally managed commercial grants and synchronization. Current Dedicated installations do not require a running CORE, a CORE machine credential, or a synchronous CORE call to configure and consume their effective entitlements.
+
+Verified Business Runtime `dev` behavior supports deployment binding with either a YAML manifest selected by `RUNTIME_ENTITLEMENTS_FILE` or explicit flat `RUNTIME_EFFECTIVE_PRODUCTS` / `RUNTIME_EFFECTIVE_CAPABILITIES`. These are alternative inputs, not combined sources. Dedicated production deployment binding requires the `DEDICATED` profile, account identity, and explicit entitlement configuration; it is not an authorization shortcut for shared/SaaS production.
+
+The modern manifest declares product and capability flags explicitly ON/OFF. For example, `products.POS.selling.PRODUCT` and `.SERVICE` are independent selling modes; `capabilities.CATALOG.SERVICE_COMPOSITION` resolves to `CATALOG_SERVICE_COMPOSITION`, while `capabilities.ORGANIZATION.MULTI_BRANCH` resolves to `MULTI_BRANCH`. A missing grant in an explicitly supplied flat capability set stays disabled. Legacy manifests/sessions retain their verified compatibility defaults; do not describe them as fail-closed modern inputs or silently remove accepted behavior.
+
+Runtime enforces the resolved entitlements together with tenant/location isolation and RBAC. Backoffice and Operational consume its session projection for navigation, actions, queries, dashboards, and reports; the browser neither grants capabilities nor connects directly to CORE for ordinary operations. Optional UI contributions must follow the effective capability and available domain projection, not the mere presence of source code.
+
+Keep the deployment-mode rules and exact supported keys with current Runtime contracts; do not assume the `dev` and `dev-workshop` lanes already support identical product vocabularies. Scope-specific availability belongs in the existing scope contracts.
+
+Implementation evidence (verified 2026-10-16, Asia/Jakarta): [deployment binding](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/integration/control-plane/deployment-runtime-binding.adapter.ts), [configuration inputs](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/config/environment.ts), [manifest parser](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/config/entitlement-manifest.ts), and [Web session projection](https://github.com/dxweb98-sys/digvation-business-web/blob/48341a9949f04f048d39e628ab33605b82dcea25/packages/auth/src/session-entitlement-access.ts). These source snapshots do not establish a production deployment or any client's active grants.
+
 ## 14. Browser trust boundary
 
 Backoffice and Operational must not bypass authoritative business domain backends for normal business behavior.
@@ -520,7 +536,7 @@ CAPABILITY ENTITLEMENT
   optional reusable capabilities such as FINANCE_OPERATIONS, PROMOTIONS, LOYALTY_POINTS, TAX_FISCAL, or future add-ons
 ```
 
-A SaaS plan/package may bundle products and capabilities. Commercial packaging is not the runtime authorization contract. CORE/control-plane resolves the package/subscription/add-ons into one explicit **effective entitlement set** consumed by trusted runtimes.
+A SaaS plan/package may bundle products and capabilities. Commercial packaging is not the runtime authorization contract. CORE/control-plane is the central resolution authority; current Dedicated-first deployment configuration is the supported local source described above. Both modes supply one explicit **effective entitlement set** consumed by trusted runtimes.
 
 Conceptually:
 
@@ -821,7 +837,7 @@ Preserve these ecosystem invariants:
 - Product/capability entitlement != deployment isolation.
 - Product/capability entitlement != infrastructure ownership.
 - Product/capability entitlement != branding.
-- SaaS plan/package name != runtime authorization; CORE resolves it to explicit effective entitlements.
+- SaaS plan/package name != runtime authorization; use explicit effective entitlements from the supported Dedicated-first or CORE-managed source.
 - Dedicated != white-label.
 - White-label != client source fork.
 - Shared UI shell != shared business authority.

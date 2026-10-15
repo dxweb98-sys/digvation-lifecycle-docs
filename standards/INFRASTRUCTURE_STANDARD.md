@@ -316,6 +316,27 @@ Required:
 
 For migration/deployment involving data risk, create/confirm a fresh restorable backup before proceeding.
 
+### Digvation-managed offsite destination
+
+The approved direction is Google Drive where configured. Use the logical destination convention:
+
+```text
+business_client_name/{date}/{backup_file}
+```
+
+Use the Installation's stable business/client folder identity and an agreed date/timezone convention. Keep the actual database backup format and extension; do not rename a PostgreSQL dump to `.db` merely to match a path example. Choose filenames that distinguish the Installation/database and capture time, without credentials or customer records in names.
+
+Operational requirements:
+
+- Before a high-risk release or migration, verify a fresh restorable database backup and its required configured offsite copy; block the risky operation if required backup/upload verification fails.
+- Restrict the Drive folder and credentials to authorized operators/service identities. Keep credentials in the existing protected secret store, outside repositories, images, backup filenames, and logs; use secure transport and appropriate storage encryption.
+- Verify capture success, file size/checksum and format, then verify upload completion and destination identity. A successful upload does not prove restorability.
+- Record the retention period, schedule, recovery objectives, and responsible operator per Installation. Apply the agreed policy to local and offsite copies; do not delete the last verified recovery copy before a replacement is verified.
+- Monitor failed capture/upload/verification, stale last-success timestamps, access/quota failures, and storage exhaustion. Alert the named operations owner through the configured monitoring channel.
+- Test restoration periodically in an isolated authorized environment, record the result and recovered version/data scope, and keep a clear recovery runbook and decision owner.
+
+This is an approved policy direction, not evidence that a Google Drive integration is deployed. Existing scripts, actual accounts/destinations, credentials, and backup execution must be verified and configured under a separately authorized infrastructure work unit. Client-installation responsibility allocation is owned by [CLIENT_INSTALLATION_STANDARD.md](CLIENT_INSTALLATION_STANDARD.md), section 17.
+
 ## 15. Server portability
 
 An Installation must be movable without changing product source code.

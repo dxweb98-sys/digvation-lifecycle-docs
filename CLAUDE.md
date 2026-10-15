@@ -106,6 +106,10 @@ Apply pragmatic Clean Architecture: thin controllers/pages → explicit applicat
 - Do not introduce a new domain, permission, API contract, or feature merely to mimic a competitor.
 - If an unrelated product defect or missing authority appears, report it as a separate finding; do not absorb it into the active DELTA.
 
+### Shared execution policy
+
+For authorized implementation and bug-fix tasks, apply `VERIFY_OR_IMPLEMENT` from [root AGENTS.md](AGENTS.md), section 5, including its requirement classifications, focused validation, reporting, and stop outcomes. Claude Code must not add a separate review-only pause for ordinary missing deltas already covered by that authority. This entry point references the shared contract; it does not redefine its scope or approval rules.
+
 ## 7. Validation and evidence
 
 **Feature-scoped validation is the implementation default**, in accordance with the root `AGENTS.md`:
@@ -167,6 +171,8 @@ Do not create prompts that merely say “inspect and fix”; do not instruct an 
 
 Provide short progress updates **only** when a root cause is established, a scope/authority conflict appears, another writer intervenes, significant validation fails, or the requested stop condition is reached. Do not narrate every command or paste hundreds of log lines.
 
+For the shared execution pattern, follow the requirement-delta reporting contract in root `AGENTS.md`, section 5, alongside the applicable Claude-specific evidence fields below.
+
 A final report should normally include:
 
 - `STATUS` and exact task-specific stop state.
@@ -183,7 +189,7 @@ For a conversation/session handoff, preserve **PROJECT CONSTANTS → CURRENT ACC
 
 If the current task specifies a stop state (for example `READY_FOR_DB_TEST_APPROVAL`, `READY_FOR_FINAL_REVIEW`, or `BLOCKED_FOR_DECISION`), **honor that exact state**. Do not silently replace it with the general default.
 
-Otherwise, when the authorized work and its required validation are complete, stop at:
+Otherwise, apply the shared execution policy's no-change outcome when relevant. When changes were required and the authorized work and its required validation are complete, stop at:
 
 **`READY_FOR_MANUAL_REVIEW`**
 

@@ -42,6 +42,8 @@ Backoffice and Operational are platform experiences. They are not automatically 
 
 A dedicated/white-label client receives only its effective entitled products and capabilities. Dedicated deployment, client-owned infrastructure, or white-label branding never grants all Digvation products or add-ons.
 
+Current Dedicated-first Installations may resolve effective entitlements from explicit deployment configuration without a synchronous CORE dependency. Follow the **Dedicated-first entitlement authority** section in [ECOSYSTEM_ARCHITECTURE.md](ECOSYSTEM_ARCHITECTURE.md) for verified manifest/flat-input modes, compatibility, and enforcement. CORE remains the future central control-plane owner; do not require unfinished CORE provisioning to activate an otherwise supported Dedicated Installation.
+
 ---
 
 ## 1. Core rule: canonical source, no client forks
@@ -600,6 +602,12 @@ A statement such as "the client handles backups" is not enough unless:
 - restore procedure is understood.
 
 Restore testing is part of ongoing operational quality.
+
+For Digvation-managed Installations, the approved offsite direction is Google Drive where configured, using the logical destination `business_client_name/{date}/{backup_file}`. Preserve the database tool's actual format and extension. Follow [INFRASTRUCTURE_STANDARD.md](INFRASTRUCTURE_STANDARD.md), section 14, for access, verification, retention, monitoring, and restore requirements; a path convention alone is not an operational integration.
+
+Record the Installation's local backup operator, Google Drive destination/access owner, upload/verification and retention owner, alert recipient, and authorized recovery operator. Digvation owns these duties for Digvation-managed infrastructure; on client infrastructure, agree each duty explicitly. Before a high-risk release/migration, require a verified restorable backup and the configured required offsite copy. Record the last successful backup/upload and restore-test result in the existing Installation/operations record.
+
+Google Drive integration and per-client destinations are not verified as deployed by this policy. Do not mark backup readiness complete until the configured mechanism and recovery evidence exist. Configuring accounts/credentials, changing deployment scripts, running backups, or restoring a database requires the applicable separate operational authorization.
 
 ---
 

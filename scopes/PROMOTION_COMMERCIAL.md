@@ -1,9 +1,17 @@
 # Promotion & Commercial Rules Scope Contract
 
 Kind: `SHARED_BUSINESS_CAPABILITY`  
-Status: `NEXT`  
+Status: `PARTIAL`
 Entitlement Class: `CAPABILITY`  
 Commercial Packaging: integrated customer-loyalty/commercial suite, add-on/bundle capable
+
+## Verified Delivery State
+
+Monetary Promotion management/evaluation and member-only eligibility have accepted source in `dev`. The wider commercial/Loyalty suite is only partially delivered: bonus-point/multiplier benefits are not supported by the verified Promotion discount contract.
+
+Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `1190ec6d9b21628a23af78e299beb576c1f75c27` [types](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/promotions/promotion.types.ts) and [evaluator](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/promotions/promotion.policy.ts); Web `48341a9949f04f048d39e628ab33605b82dcea25` [management model](https://github.com/dxweb98-sys/digvation-business-web/blob/48341a9949f04f048d39e628ab33605b82dcea25/apps/backoffice/src/modules/promotions/promotion-editor-form.ts).
+
+Release/deployment: `NOT_VERIFIED` here. Client availability still requires effective `PROMOTIONS`, permission/location scope, and Membership context for member-only benefits. Commercial bundling and scope status do not enable a client. Wider benefit/projection examples below remain envelope unless included in the verified `Current Scope`.
 
 ## Purpose
 
@@ -76,8 +84,8 @@ Promotion owns:
 - Catalog target references;
 - Customer/Member eligibility;
 - temporary commercial benefit;
-- temporary loyalty bonus/multiplier;
-- priority;
+- temporary loyalty bonus/multiplier when separately implemented;
+- deterministic selection/priority semantics supported by the accepted evaluator;
 - simple stacking/exclusivity policy where current scope supports it;
 - applied-promotion historical result/reference needed by transactions.
 
@@ -85,12 +93,14 @@ Promotion does not directly mutate point balances.
 
 ## Current Promotion Lifecycle
 
-Use a minimal lifecycle:
+The current Runtime derives these statuses from the enabled flag and effective period:
 
-- `DRAFT`
 - `ACTIVE`
-- `INACTIVE`
+- `SCHEDULED`
 - `EXPIRED`
+- `DISABLED`
+
+There is no separate `DRAFT` approval state in the verified contract. Do not substitute conceptual `INACTIVE`/`DRAFT` enums for Runtime's transport vocabulary.
 
 Current scope does not require approval workflow.
 
@@ -124,12 +134,9 @@ Do not use literal `Owner` or `Manager` role names as durable authorization logi
 
 Promotion references Catalog and does not own it.
 
-Current first checkpoint supports targeting:
+Current evaluation supports `ITEM`, `CATEGORY`, and `TRANSACTION` scope, with item, variant, category, and location references as applicable. A parent-item target covers its eligible variants; a variant target is precise. An overlap is one eligible candidate/benefit, not a second discount merely because both references match.
 
-- all eligible Catalog entries;
-- selected Catalog item/product/service entries.
-
-Category/classification/tag targeting may be added later when explicitly activated.
+Advanced classification/tag targeting beyond the implemented category contract remains deferred.
 
 Current Promotion must work with both product and service Catalog entries when the consuming domain supports them.
 
@@ -139,7 +146,7 @@ Promotion must not store temporary campaign state directly on Catalog entries.
 
 Current promotion eligibility may be:
 
-- `ALL_CUSTOMERS`;
+- `ALL`;
 - `MEMBERS_ONLY`.
 
 `MEMBERS_ONLY` requires Membership capability/context.
@@ -150,7 +157,7 @@ A Promotion may be valid without Membership.
 
 ## Current Benefit Types
 
-Current first checkpoint supports a deliberately small set of benefit types.
+The current `PromotionDiscountType` supports two monetary benefit types.
 
 ### 1. Percentage Discount
 
@@ -168,7 +175,11 @@ Example:
 Rp20.000 discount
 ```
 
-### 3. Loyalty Bonus Points
+## Deferred Loyalty Benefit Envelope
+
+The following benefits retain their intended Promotion/Loyalty ownership, but are not implemented by the current monetary Promotion contract. They require an explicitly authorized work unit.
+
+### Loyalty Bonus Points
 
 Example:
 
@@ -178,7 +189,7 @@ Example:
 
 The resulting point ledger entry remains Loyalty-owned.
 
-### 4. Loyalty Point Multiplier
+### Loyalty Point Multiplier
 
 Example:
 
@@ -267,7 +278,7 @@ Promotion must not become POS Sale authority.
 
 ## Interaction with Loyalty Earning
 
-Current policy:
+Current monetary integration policy:
 
 Normal spend-based Loyalty earning uses the accepted eligible transaction amount after ordinary Promotion discounts.
 
@@ -284,7 +295,7 @@ Rp10.000 = 1 point
 Normal earn = 8 points
 ```
 
-If the Promotion also defines:
+For a future explicitly implemented Loyalty modifier, a conceptual example is:
 
 ```text
 2x points
@@ -298,7 +309,7 @@ x2 promotion multiplier
 = 16 final earned points
 ```
 
-The final ledger history remains Loyalty-owned and must preserve the promotion reference used to derive the result.
+That future ledger integration remains Loyalty-owned and must preserve its Promotion reference. This example does not declare a current `2x` benefit type.
 
 ## Interaction with Loyalty Redemption
 
@@ -312,13 +323,15 @@ Do not let Promotion directly debit points.
 
 ## Current Stacking Policy
 
-Avoid a complex combinability engine in the first checkpoint.
+Current Runtime ordering is explicit:
 
-Current rule:
+- choose one best eligible `ITEM`/`CATEGORY` monetary Promotion per line;
+- choose one best eligible `TRANSACTION` Promotion on the remainder after line Promotions;
+- choose by greatest discount amount, then stable Promotion identifier on a tie;
+- apply manual discounts later under the Sale calculation contract, then Loyalty redemption and captured tax;
+- automatic and submitted-code eligibility share the same backend evaluation; a changed cart may make a saved code temporarily ineligible without granting another discount.
 
-- monetary promotions are non-stackable by default;
-- when multiple monetary promotions are eligible, an explicit deterministic priority/evaluation rule must choose the applicable promotion;
-- loyalty bonus/multiplier may coexist with one monetary promotion only when explicitly configured/supported by the evaluation contract.
+Line and transaction benefits may therefore coexist in that defined order. There is no configurable priority/stack-group field or delivered Loyalty modifier to combine in the verified contract.
 
 Do not invent arbitrary frontend stacking.
 
@@ -388,7 +401,7 @@ Current Promotion management surface may include:
 - Catalog targets;
 - customer/member eligibility;
 - benefit type/value;
-- simple priority;
+- backend-determined selection outcome;
 - current lifecycle/status;
 - audit/history when Activity integration is implemented.
 
@@ -446,24 +459,23 @@ Approval-related audit events remain deferred with approval workflow.
 
 ## Current Scope
 
-The current locked first Promotion checkpoint includes:
+The verified accepted monetary subset includes:
 
 - Promotion capability-aware availability;
-- `DRAFT`, `ACTIVE`, `INACTIVE`, `EXPIRED`;
+- enabled flag with derived `ACTIVE`, `SCHEDULED`, `EXPIRED`, `DISABLED`;
 - start/end validity;
 - location scope;
-- all-catalog or selected Catalog-entry targeting;
+- `ITEM`, `CATEGORY`, and `TRANSACTION` targeting;
+- parent-item and precise Variant targets without duplicated overlap benefits;
+- `AUTOMATIC` or `CODE` mode, with supported minimum-purchase/maximum-discount configuration;
 - all-customer or member-only eligibility;
 - percentage discount;
 - fixed-amount discount;
-- loyalty bonus points;
-- loyalty point multiplier;
-- deterministic simple priority;
-- non-stackable monetary promotion default;
+- deterministic best-per-line then best-per-transaction monetary evaluation;
 - backend-authoritative evaluation;
 - historical applied-promotion reference/outcome;
 - POS consumption/integration;
-- explicit Membership/Loyalty integration;
+- active-Membership eligibility; Loyalty ledger and durable earning rules remain separately owned;
 - Backoffice management surface;
 - no standalone Operational module.
 
@@ -471,12 +483,12 @@ The current locked first Promotion checkpoint includes:
 
 Unless explicitly activated:
 
-- coupons/codes;
-- voucher system;
+- a voucher system beyond the implemented Promotion-code mode;
+- Loyalty bonus points and point multipliers;
 - buy-X-get-Y;
 - free item/free service;
 - fixed promotional price;
-- advanced Catalog category/tag targeting;
+- advanced Catalog tag/classification targeting beyond implemented category scope;
 - Membership tiers;
 - customer segmentation;
 - birthday campaign;
@@ -485,6 +497,7 @@ Unless explicitly activated:
 - advanced usage quotas;
 - channel-specific campaigns;
 - approval workflow;
+- a separate draft/approval lifecycle;
 - advanced stacking/combinability matrices;
 - automatic promotion optimization;
 - external promotion providers;
@@ -518,4 +531,4 @@ This scope locks Promotion behavior and its relationship with Membership/Loyalty
 
 It does not authorize implementation by itself.
 
-Implementation should begin only after the current Operational baseline is accepted, unless the user explicitly changes that priority.
+Further implementation requires an explicit work unit against the latest accepted baseline. Do not restart accepted monetary Promotion or infer implementation authority for the deferred Loyalty benefits.

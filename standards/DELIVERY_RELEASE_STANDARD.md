@@ -4,27 +4,19 @@
 
 ## 1. Branch roles
 
-Every repository identifies:
+The current Business Runtime and Business Web repositories use these long-lived branches:
 
-- stable branch — normally `main`;
-- development integration branch — repository-specific;
-- short-lived feature/fix/refactor branches.
+| Branch | Responsibility |
+| --- | --- |
+| `main` | Production source baseline. Advancing it does not itself authorize deployment. |
+| `dev` | Main development integration. |
+| `dev-workshop` | Workshop development integration where applicable. |
+| `stage` | Staging integration and release validation for `dev`. |
+| `stage-workshop` | Workshop staging integration and release validation where applicable. |
 
-Current POS examples:
+Use temporary feature/fix/refactor branches from the appropriate latest accepted development baseline. Normal promotion is `feature/fix -> dev -> stage -> main`, or `feature/fix -> dev-workshop -> stage-workshop -> main` for an explicitly scoped Workshop release. Reconcile shared changes and component compatibility before release; do not automatically merge the two development lanes.
 
-```text
-POS Backend
-feature/fix branch
-  -> digvation-pos-dev
-  -> main
-
-POS Web
-feature/fix branch
-  -> dev
-  -> main
-```
-
-Do not implement directly on stable or integration branches.
+Do not implement directly on stable or integration branches unless the user explicitly authorizes an exception for the exact operation, repository, branch, and scope. Such an exception does not change the normal workflow, bypass branch protection, or authorize a deployment.
 
 Do not create client-specific source branches.
 
@@ -72,44 +64,34 @@ Rules:
 
 A feature branch may contain working commits, but the accepted integration history should remain understandable.
 
-Squash when it meaningfully removes noisy implementation history; do not squash merely as ritual.
+Accepted feature/fix PRs use an explicitly approved squash merge into the appropriate development integration branch. A different merge strategy requires an explicit task-specific decision.
 
 ## 4. Feature delivery state machine
 
-```text
-LATEST ACCEPTED INTEGRATION BASELINE
-        |
-        v
-FEATURE BRANCH
-        |
-        v
-IMPLEMENT COHERENT WORK UNIT
-        |
-        v
-TARGETED CHECKS ONLY WHEN MATERIALLY USEFUL
-        |
-        v
-COMPLETE REQUESTED FEATURE/PAGE/SLICE
-        |
-        v
-ONE SCOPED FINAL VALIDATION
-        |
-        v
-READY_FOR_MANUAL_REVIEW
-        |
-        +---- REJECT ----> REMEDIATE SAME BRANCH
-        |                     |
-        |                     +--> scoped validation
-        |                     +--> manual review again
-        |
-        +---- APPROVE ---> COMMIT/PUSH AS AUTHORIZED
-                              |
-                              v
-                         MERGE TO DEV
-                              |
-                              v
-                             STOP
-```
+1. Confirm the latest accepted integration baseline and work on a temporary feature/fix branch.
+2. Implement the authorized coherent work unit with targeted checks where materially useful.
+3. Complete focused validation and report `READY_FOR_MANUAL_REVIEW`.
+4. If rejected, remediate on the same branch, rerun affected focused checks, and return to manual review.
+5. After manual acceptance, commit and push only when those operations are authorized.
+6. Create the PR only when authorized; review the exact current head and required CI results.
+7. Squash merge only after explicit merge approval into `dev` or `dev-workshop`, then stop at the requested integration boundary.
+8. Under a separately authorized release scope, prepare `stage` or `stage-workshop` and verify the intended release source/artifacts in staging or an accepted equivalent.
+9. Obtain explicit release approval before advancing production `main` with the accepted source.
+10. Deploy only with explicit production deployment approval, promoting the same accepted immutable artifact, then perform post-deploy verification.
+
+### Approval boundaries
+
+| Approval | Authorizes |
+| --- | --- |
+| Implementation | The named local work unit and its permitted focused validation. |
+| Commit/push | Only the specified Git writes, repositories, and branches. |
+| PR creation | Opening the specified PR; no merge authority. |
+| Merge | Merging the reviewed head with passing applicable checks into the named integration branch. |
+| Staging | The specified staging preparation, deployment/migrations, and acceptance checks within the approved environment. |
+| Production release | Advancing `main`/release references for the accepted release scope. |
+| Production deployment | Deploying the named accepted artifact to the specified Installation/environment. |
+
+One explicit instruction may name multiple operations, but an agent must not infer later approvals from earlier ones. Implementation approval is not commit/push approval; manual acceptance is not PR/merge approval; merging to development or production `main` is not deployment approval. Database and infrastructure writes retain their own applicable authorization boundaries.
 
 Do not start the next roadmap item automatically.
 
@@ -127,7 +109,7 @@ Flow:
 6. validate each changed repository with its own scoped gate;
 7. perform human/manual review;
 8. approve/reject;
-9. commit/push/merge repositories independently;
+9. commit/push, create reviewed PRs, and squash merge repositories independently only as specifically authorized;
 10. record compatibility at release boundary when needed.
 
 Do not create duplicate frontend business authority because backend work is inconvenient.
@@ -338,7 +320,7 @@ Separate:
 
 ## 16. Staging gate
 
-Before production:
+Staging preparation and deployment require authorization for the release scope and environment. Use `stage` for the `dev` lane and `stage-workshop` for the Workshop lane where applicable. Before production:
 
 - deploy the intended release artifact to staging or an equivalent pre-production environment;
 - apply the intended migration path;
@@ -405,6 +387,8 @@ After production:
 ## 20. Rollback
 
 Every production release needs an understood rollback path.
+
+Select rollback by the previously accepted component version and immutable artifact digest, recording its original source/build revision and compatible configuration/migration state. Do not rebuild old source or force-reset `main` as a substitute for artifact rollback.
 
 Rollback may include:
 

@@ -2,8 +2,8 @@
 
 Kind: `SHARED_BUSINESS_FOUNDATION`
 Status: `ACTIVE`
-Entitlement Class: `PLATFORM_FOUNDATION`
-Commercial Packaging: `BASE`
+Entitlement Class: `PLATFORM_FOUNDATION` + `CAPABILITY` for optional Service composition
+Commercial Packaging: base catalog foundation + explicitly entitled Service composition
 
 ## Purpose
 
@@ -63,6 +63,16 @@ The final transaction price, discounts, promotions, tax outcome, and monetary sn
 
 Do not silently make Catalog a universal pricing/discount engine.
 
+## Service Composition / BOM Availability
+
+Catalog owns the accepted reusable Service composition configuration: Service defaults, Service-Variant overrides, component quantities, and included/follow-current/fixed component pricing. POS owns the captured Sale component/price facts and execution outcome; Inventory stock remains a separate authority.
+
+The optional capability is `CATALOG_SERVICE_COMPOSITION`. Current Dedicated-first modern manifests declare `capabilities.CATALOG.SERVICE_COMPOSITION` explicitly true/false; explicit flat capabilities must include the key to grant it. The supported configuration modes and legacy defaults are owned by [ECOSYSTEM_ARCHITECTURE.md](../standards/ECOSYSTEM_ARCHITECTURE.md).
+
+In the accepted `dev` baseline, OFF rejects new/replacement BOM configuration while existing compositions remain readable/executable under normal Service/POS permissions and selling capability checks. Services without BOM remain saleable. Do not treat OFF as permission to erase historical components or as disabling all Service sales. Component references do not grant Product selling or Inventory capability.
+
+Evidence: Runtime [composition contract](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/catalog/service-composition.ts), [write gate](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/catalog/catalog.service.ts), and accepted Runtime [PR #113](https://github.com/dxweb98-sys/digvation-business-runtime/pull/113) / Web [PR #148](https://github.com/dxweb98-sys/digvation-business-web/pull/148). This does not establish production rollout or a client's enabled state.
+
 ## Promotion Relationship
 
 Catalog exposes stable entries/categories/classifications that Promotion may target; Promotion owns campaign validity, eligibility, benefit, priority/stacking, and location scope.
@@ -87,7 +97,7 @@ Catalog classification
         -> Tax/Fiscal rule evaluation
 ```
 
-A Tax configuration screen may show only catalog classifications relevant to the client's entitled/enabled business domains.
+A future classification-based Tax configuration screen may show only classifications relevant to entitled/enabled domains. The current Business tax configuration does not assign tax per Catalog item; see [TAX_FISCAL.md](TAX_FISCAL.md).
 
 Tax/Fiscal must not become the owner of Catalog merely because it configures tax mapping against catalog classifications.
 
@@ -105,7 +115,7 @@ Examples may include:
 
 The exact information hierarchy should remain readable and capability-aware, not one giant form containing every future domain field.
 
-Any Catalog UI work must use `uiuxpromax` and the existing Digvation Design System.
+Any Catalog UI work must apply both `frontend-design` and `ui-ux-pro-max` when available under root `AGENTS.md`, alongside the existing Digvation Design System.
 
 ## Operational Contribution
 
@@ -114,7 +124,7 @@ Operational domains consume catalog lookup/search/selection as needed.
 Examples:
 
 - POS searches/selects sellable catalog entries;
-- Workshop later selects services/parts;
+- Workshop selects services/parts within its verified Work Order slice;
 - Inventory later references catalog items for stock operations.
 
 Catalog does not require a standalone Operational application.
@@ -150,7 +160,7 @@ Near-term Customer/Membership or Tax work may consume Catalog only where materia
 - advanced product variants/options;
 - complex pricing engine;
 - advanced promotion-specific catalog targeting helpers beyond the accepted Promotion contract;
-- BOM/recipes;
+- advanced recipes/production composition beyond the accepted Service BOM contract;
 - vendor/procurement catalog;
 - arbitrary domain schemas;
 - any capability not explicitly activated.

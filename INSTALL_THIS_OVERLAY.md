@@ -2,6 +2,8 @@
 
 Copy the contents of this folder into your local `lifecycle/` workspace.
 
+This is manual overlay installation guidance, not a record of current feature delivery or a command to replace an already configured workspace. Use current remote canonical files; an older exported ZIP may omit newer instructions, scopes, or configuration.
+
 Important:
 
 - do not overwrite repository-specific unique rules blindly;
@@ -9,7 +11,7 @@ Important:
 - the `standards/` folder is canonical reference documentation;
 - `standards/PROMPT_LIBRARY.md` is your copy/paste toolbox, not permanent agent study material.
 
-After placement, run the `First-Time Standards Study / Bootstrap` prompt from `standards/PROMPT_LIBRARY.md` once.
+For a genuinely new workspace, use the `First-Time Standards Study / Bootstrap` prompt from `standards/PROMPT_LIBRARY.md` once as needed. Existing workspaces continue under the current root `AGENTS.md`, the tool-specific entry contract, and the accepted handoff; do not repeat a broad bootstrap for each task.
 
 ## Scope contracts
 
@@ -20,6 +22,6 @@ It is the living business-scope catalog. Update the applicable scope contract wh
 Agents should read only the scope contracts materially relevant to the current task.
 
 
-## Scope catalog additions
+## Scope catalog authority
 
-The lifecycle scope catalog now includes active shared foundations/capabilities for Organization/Location, Catalog, Workforce, Account/Identity/RBAC, Operational Access & Location Context, Audit & Activity, and Dashboard/Reporting. Customer/Membership, Promotion/Commercial Rules, and Tax/Fiscal remain next scopes; Inventory and Workshop remain planned until explicitly activated. Scope contracts now also declare entitlement/commercial availability so product domains, optional capabilities/add-ons, and platform foundations are not conflated.
+Use [scopes/README.md](scopes/README.md) and the applicable scope contract for current status, verified delivery subsets, branch/release evidence, and deferred boundaries. Do not infer implementation, deployment, or client entitlement from this installer or an older archive. Product domains, optional capabilities/add-ons, and shared foundations retain separate authorities.

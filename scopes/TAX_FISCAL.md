@@ -1,9 +1,17 @@
 # Tax / Fiscal Rules Scope Contract
 
 Kind: `SHARED_BUSINESS_CAPABILITY`
-Status: `NEXT`
+Status: `PARTIAL`
 Entitlement Class: `CAPABILITY`
 Commercial Packaging: `BUNDLED_OR_OPTIONAL`
+
+## Verified Delivery State
+
+The accepted `dev` subset is tenant-level Business tax configuration (enabled/rate/version), backend calculation and captured transaction facts, Backoffice configuration, and tax-report projections. The wider dynamic classification/jurisdiction envelope below is not a delivered fiscal engine.
+
+Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `1190ec6d9b21628a23af78e299beb576c1f75c27` [configuration/default](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/business-configuration/business-configuration.repository.ts), [configuration service](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/business-configuration/business-configuration.service.ts), and accepted [reporting change](https://github.com/dxweb98-sys/digvation-business-runtime/commit/ecf7712215d99fa9e8bf4120c53c05e58769f8c2); Web accepted [Business tax configuration change](https://github.com/dxweb98-sys/digvation-business-web/commit/d6e486268c702e23d45388c8339bed070dd9c938) remains in `dev` at `48341a9949f04f048d39e628ab33605b82dcea25`.
+
+Release/deployment: `NOT_VERIFIED` here. A client's effective `TAX_FISCAL` grant is separate from the tenant Business tax enabled/rate settings and from this scope's maturity. No source snapshot establishes a live client's tax setup.
 
 ## Commercial Availability / Effective Entitlement
 
@@ -17,7 +25,7 @@ Tax is not POS-local logic and must not be duplicated per business domain.
 
 ## Owns / Authority
 
-When implemented, Tax/Fiscal may own:
+The wider Tax/Fiscal envelope may own, only as explicitly implemented:
 
 - tax rules and rates;
 - tax categories/classifications;
@@ -33,7 +41,7 @@ Exact legal/fiscal capabilities must be introduced only by explicit scope and ap
 
 ## Dynamic Rule Context
 
-Tax evaluation must be context-aware rather than hard-coded by product.
+Tax evaluation must use authoritative context rather than hard-coded product/client names. The wider future rule envelope is context-aware; the current subset uses tenant Business tax configuration.
 
 A rule may consider authoritative inputs such as:
 
@@ -59,7 +67,7 @@ Each consuming domain remains owner of its transaction; Tax/Fiscal owns rule eva
 
 Tax does not become the owner of the business catalog.
 
-Catalog/domain owners expose stable classifications required for tax evaluation.
+Catalog/domain owners may expose stable classifications when an explicitly activated rule contract requires them. Current Business tax is not assigned per Catalog item and does not require restoring retired item-tax authority.
 
 Examples may include:
 
@@ -72,9 +80,9 @@ Tax configuration follows the client's entitled business domains and available c
 
 ## Backoffice Contribution
 
-Tax/Fiscal has its own configuration entry in Backoffice, conceptually under configuration/settings.
+Current Backoffice exposes tax enabled/rate through Business Configuration. The broader future Tax/Fiscal configuration entry belongs conceptually under configuration/settings and must not create a second current tax authority.
 
-The configuration experience must be composed from:
+Where classification-based rules are explicitly activated, their configuration experience must be composed from:
 
 ```text
 Client Entitlement
@@ -92,7 +100,7 @@ Examples:
 
 The UI must remain readable and context-sensitive rather than presenting every possible rule at the same visual level.
 
-Any Tax/Fiscal UI work must use `uiuxpromax` and the existing Digvation Design System.
+Any Tax/Fiscal UI work must apply both `frontend-design` and `ui-ux-pro-max` when available under root `AGENTS.md`, alongside the existing Digvation Design System.
 
 ## Operational Contribution
 
@@ -125,13 +133,22 @@ Accounting/Tax Compliance scope.
 
 ## Current Scope
 
-Architecture/boundary is now defined.
+The verified accepted subset includes:
 
-Implementation details are not yet authorized beyond an explicit future feature task.
+- tenant Business tax `enabled`, decimal `rate`, and optimistic configuration version;
+- application default enabled with rate `0.11` (11%) when no persisted Business tax configuration exists;
+- an explicit Business tax toggle independent from entitlement availability;
+- backend-authoritative tax calculation using the accepted Sale monetary ordering;
+- captured historical tax results for receipts and qualifying finalized-transaction reporting;
+- Backoffice Business Configuration and permission/capability-aware Tax report access.
+
+Do not reintroduce per-item tax as current authority. A broader dynamic rule editor, location/jurisdiction categories, or effective-dated tax engine is outside this delivered subset and requires an explicit future task.
 
 ## Deferred / Future
 
 - jurisdiction-specific fiscal integrations;
+- classification/category/location-based rule configuration beyond tenant Business tax;
+- an effective-dated multi-rule engine beyond captured configuration versions;
 - tax exemptions/customer tax profiles;
 - complex compound taxes;
 - external tax provider integration;
@@ -144,7 +161,7 @@ Implementation details are not yet authorized beyond an explicit future feature 
 - Promotion/Commercial Rules does not calculate tax; consuming transaction domains pass the authoritative monetary/taxable context after the accepted commercial-benefit ordering;
 - no duplicated POS tax engine and Workshop tax engine;
 - tax calculations that affect money are backend-authoritative;
-- rules are effective-dated/versioned;
+- current Business configuration is versioned; effective-dated rules apply only when their wider contract is explicitly implemented;
 - historical documents preserve the applied tax outcome/rule reference;
 - consuming transactions persist the applied tax facts needed for historical
   receipt/report projection, including applicable tax identity/rate/treatment,
