@@ -102,19 +102,19 @@ Business preferences:
 
 ```text
 Access Control
-â”œâ”€â”€ Users
-â”œâ”€â”€ Roles
-â””â”€â”€ Location Access
+├── Users
+├── Roles
+└── Location Access
 ```
 
 Location Access composes `OPERATIONAL_ACCESS`; it does not move location scope
-into Role data or Business Settings. Do not imply an invitation workflow merely
-because an account lifecycle can include a pending state unless an accepted
-identity contract introduces invitations.
+into Role data or Business Settings. Account invitations are an accepted
+identity contract (see Current Scope); do not extend them into new invitation
+workflows beyond that contract without an explicit task.
 
 Do not visually flatten identity, role, and location scope into one giant form. Use readable sections and current Digvation UI patterns.
 
-Any UI/UX work must use `uiuxpromax` and the existing Digvation Design System.
+Any UI/UX work must follow [UI_UX_STANDARD.md](../standards/UI_UX_STANDARD.md), applying both `frontend-design` and `ui-ux-pro-max`, and the existing Digvation Design System.
 
 ## Operational Contribution
 
@@ -161,6 +161,14 @@ Current durable rules:
 - Manager operational location access remains assignment-based;
 - backend authorization is authoritative;
 - tenant isolation is mandatory.
+
+Verified delivered account lifecycle. Implementation chronology: Runtime PR #114 merged into `dev` on 2026-10-15 and PR #118 on 2026-10-18. Release inclusion: both merge commits are ancestors of every Runtime release from `v1.4.0` (published 2026-10-18) through the current `v1.6.1`; they were not introduced by `v1.6.1`. Deployment to client Installations: `NOT_VERIFIED` (verified 2026-10-27).
+
+- Dedicated initial Owner provisioning with single-use activation links;
+- account invitations: resend, expired-invitation reissue, Owner protection, terminal accepted/revoked states;
+- self profile/username changes, persistent verification attempt limits;
+- password-reset lifecycle with session revocation and Owner/tenant authorization;
+- activation and recovery link delivery by email.
 
 Existing accepted account/auth/role implementations must be discovered with Codebase Memory MCP and verified against source before changing them.
 

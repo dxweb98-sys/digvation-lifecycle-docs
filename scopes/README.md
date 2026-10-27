@@ -154,8 +154,9 @@ For frontend/UI work, discover, read, and apply both `frontend-design` and `ui-u
 | [TAX_FISCAL.md](TAX_FISCAL.md) | `PARTIAL` | Business-level tax configuration and transaction/report facts accepted in `dev`; wider fiscal engine remains future. |
 | [INVENTORY.md](INVENTORY.md) | `PLANNED` | Business domain boundary reserved. |
 | [WORKSHOP.md](WORKSHOP.md) | `PARTIAL` | Work Order execution/billing-validation subset accepted in `dev-workshop`; wider integrations remain future. |
+| [SCHEDULING.md](SCHEDULING.md) | `NEXT` | Business domain; Service Appointment scope defined. No Runtime implementation verified on `main`, `dev`, or `dev-workshop` (2026-10-27). |
 
-This table is descriptive. Actual repository/source reality must still be verified before implementation.
+This table is descriptive. Actual repository/source reality must still be verified before implementation. Since the 2026-10-16 reconciliation, Runtime/Web `dev` content was released as `v1.6.1` on `main` (2026-10-23); release and deployment evidence is tracked in [docs/CURRENT_PLATFORM.md](../docs/CURRENT_PLATFORM.md), not in this catalog.
 
 ## Current entitlement/packaging examples
 
@@ -163,6 +164,7 @@ This table is descriptive. Actual repository/source reality must still be verifi
 POS                    PRODUCT              PRODUCT
 INVENTORY              PRODUCT              PRODUCT
 WORKSHOP               PRODUCT              PRODUCT
+SCHEDULING             PRODUCT              PRODUCT
 PROMOTIONS             CAPABILITY           ADD_ON_CAPABLE
 LOYALTY_POINTS          CAPABILITY           ADD_ON_CAPABLE
 TAX_FISCAL              CAPABILITY           BUNDLED_OR_OPTIONAL

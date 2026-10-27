@@ -37,8 +37,9 @@ Then inspect the existing repository-local AGENTS.md and documentation for:
 - digvation-core-ui
 - digvation-business-runtime
 - digvation-business-web
-- apps/cashier
+- apps/operational
 - apps/backoffice
+- apps/member-portal
 
 This is DOCUMENTATION / INSTRUCTION RECONCILIATION ONLY.
 
@@ -73,7 +74,7 @@ Work from the latest accepted integration baseline.
 Follow all applicable AGENTS.md instructions.
 Read the owning `scopes/<SCOPE>.md` contract before implementation.
 Use Codebase Memory MCP before broad repository exploration and verify important findings against source.
-For frontend/UI work, use `uiuxpromax` automatically and preserve the Digvation Design System.
+For frontend/UI work, apply `standards/UI_UX_STANDARD.md`, discover/read/apply both `frontend-design` and `ui-ux-pro-max`, and preserve the Digvation Design System.
 
 Scope:
 <short feature scope>
@@ -100,7 +101,7 @@ Continue <PRODUCT> with <FEATURE NAME> as one backend/frontend vertical slice.
 Follow all applicable AGENTS.md instructions.
 Read the owning and directly integrated `scopes/<SCOPE>.md` contracts only.
 Use Codebase Memory MCP in each materially involved repository before broad exploration.
-For frontend/UI work, use `uiuxpromax` automatically and preserve the Digvation Design System.
+For frontend/UI work, apply `standards/UI_UX_STANDARD.md`, discover/read/apply both `frontend-design` and `ui-ux-pro-max`, and preserve the Digvation Design System.
 
 First verify the current backend contract and classify:
 - NO_BACKEND_CHANGE

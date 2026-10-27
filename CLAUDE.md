@@ -23,7 +23,7 @@ At session/task entry:
 1. Confirm the `@AGENTS.md` import above has loaded. If unavailable or uncertain, read the adjacent `AGENTS.md` explicitly with the available file-reading tool; do not assume automatic discovery.
 2. Do not reread the same unchanged contract merely for reassurance.
 3. For work in a nested repository, load its applicable `AGENTS.md` before editing. Nested rules may specialize but must not silently weaken the global contract.
-4. Read only the one or two relevant `standards/` and `scopes/` contracts needed for the task. Do not preload whole directories.
+4. Read only the one or two relevant `standards/` and `scopes/` contracts needed for the task, using the task-routing table in root `README.md`. Do not preload whole directories.
 5. For an existing task, read the supplied current handoff/checkpoint and preserve prior accepted decisions. Do not resume a historical sample task from a standards document.
 6. Prefer launching Claude Code from this root through `start-claude.ps1` so the intended project context and installed integrations are available.
 
@@ -34,7 +34,7 @@ Before proposing a **new** solution:
 1. Determine the actual domain/application owner and authoritative backend contract; do not infer ownership from repository names.
 2. Classify the task as investigation, approved implementation, review, product/UX decision, architecture, infrastructure, or release work.
 3. Apply the global `COMPETITOR_RESEARCH_GATE`: `SKIP_RESEARCH`, `LIGHT_RESEARCH`, or `DEEP_RESEARCH_REA`.
-4. When research is justified, follow **Autonomous competitor discovery** in `AGENTS.md`: identify the market, segment, and exact feature; discover and verify up to three feature-relevant references without requiring competitor names (Indonesian-market-first when applicable). Keep the full research procedure, evidence rules, and REA security/authorization gates **only** in `AGENTS.md`; do not duplicate them here. REA remains optional.
+4. The mandatory research gate lives in `AGENTS.md` §3A; the detailed procedure (competitor discovery, evidence rules, REA security/authorization conditions, reporting) lives only in [standards/COMPETITOR_RESEARCH_STANDARD.md](standards/COMPETITOR_RESEARCH_STANDARD.md). Load that standard only for `LIGHT_RESEARCH` or `DEEP_RESEARCH_REA`, before research begins. Claude Code and Codex follow the same policy; do not restate it here. REA remains optional.
 5. Prefer **REUSE → EXTEND → NEW** after verifying existing ownership and behavior.
 
 Do not rerun classification, competitor research, or accepted architecture analysis on each follow-up of an approved task. Research findings may inform `ADOPT / ADAPT / REJECT / DEFER` recommendations but cannot authorize scope changes. Stop for explicit approval when the recommendation requires a new product policy, tool installation, sensitive analysis, migration, or feature expansion.
@@ -165,7 +165,7 @@ When **creating a new implementation prompt or delegating a task** to Claude Cod
 
 For an **ongoing approved task**, do **not** reproduce the full universal contract in each follow-up. Use a compact header: `DELTA ONLY — KEEP ALL PREVIOUS CONSTRAINTS`, then new verified evidence, exact blocker, narrow action, prohibitions, and stop state.
 
-Do not create prompts that merely say “inspect and fix”; do not instruct an agent to improve anything else it notices. Read detailed prompt templates/standards **conditionally** when composing prompts; do not load obsolete example task sections as active instructions. Preserve the user-required English prompt language while ordinary user discussion may remain in Indonesian.
+Do not create prompts that merely say “inspect and fix”; do not instruct an agent to improve anything else it notices. Read detailed prompt templates/standards **conditionally** when composing prompts; do not load obsolete example task sections as active instructions. Preserve the user-required English prompt language while ordinary user discussion may remain in Indonesian (root `AGENTS.md` §18).
 
 ## 10. Progress reports, checkpoints, and handoff
 

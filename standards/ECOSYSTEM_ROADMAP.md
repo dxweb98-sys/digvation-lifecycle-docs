@@ -32,18 +32,21 @@ ACTIVE / CURRENTLY RELEVANT
 - Workforce / Employee Management
 - Dashboard & Reporting composition
 
-NEXT TO DEFINE / DELIVER BY EXPLICIT TASK
+PARTIAL — ACCEPTED SUBSET DELIVERED, WIDER ENVELOPE BY EXPLICIT TASK
 - Customer & Membership / Loyalty
 - Promotion / Commercial Rules
-- Dynamic Tax / Fiscal configuration and rule capability
+- Tax / Fiscal (business-level configuration delivered; dynamic rule engine future)
+- Workshop (separate dev-workshop lane)
+
+NEXT TO DEFINE / DELIVER BY EXPLICIT TASK
+- Scheduling (Service Appointment)
 
 PLANNED, NOT YET IMPLEMENTATION AUTHORITY
 - Inventory
-- Workshop
 - later business domains
 ```
 
-The status above is directional context only. The current user task is always the implementation boundary.
+The status above is directional context only. The current user task is always the implementation boundary. Scope status and verified delivery subsets are owned by `../scopes/README.md`; the dated implementation/release snapshot is `../docs/CURRENT_PLATFORM.md`.
 
 ## CORE direction
 
@@ -90,7 +93,10 @@ Inventory
 - canonical stock authority when activated
 
 Workshop
-- first-class sibling business domain when its detailed scope is later locked
+- first-class sibling business domain; scope defined in `../scopes/WORKSHOP.md`
+
+Scheduling
+- service appointment domain; scope defined in `../scopes/SCHEDULING.md`
 ```
 
 Existing accepted code is migration/reuse source and must be moved/re-homed rather than discarded and rebuilt when ownership changes.
@@ -107,7 +113,7 @@ Operational
 Business domains and shared capabilities contribute modules/projections to these experiences.
 
 Current `apps/backoffice` is the Backoffice foundation.
-Current `apps/cashier` is the existing POS Operational implementation and migration source for the broader Operational experience.
+Current `apps/operational` (formerly `apps/cashier`) is the existing POS Operational implementation and migration source for the broader Operational experience. `apps/member-portal` is a customer-facing Membership surface, not a third management/execution experience.
 
 Do not create product-specific permanent UI shells merely because a new business domain is added.
 

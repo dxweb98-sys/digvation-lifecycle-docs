@@ -168,7 +168,7 @@ under Access Control. It is an administration composition only: assignment
 records and enforcement remain this scope's backend authority, not Role data,
 Selling Location preferences, or browser state.
 
-Exact navigation and UI must follow the current requested scope, `uiuxpromax`, and the Digvation Design System.
+Exact navigation and UI must follow the current requested scope, [UI_UX_STANDARD.md](../standards/UI_UX_STANDARD.md) (both `frontend-design` and `ui-ux-pro-max`), and the Digvation Design System.
 
 ## Operational Contribution
 

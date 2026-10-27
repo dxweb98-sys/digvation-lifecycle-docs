@@ -83,156 +83,24 @@ Backoffice and Operational are shared experiences. They compose the effective pr
 
 ## 3A. Competitor Research Gate — Optional, Evidence-Driven
 
-Before proposing a solution for a newly scoped task, evaluate whether external competitor research would materially improve the product or architecture decision.
+For every newly scoped task, after determining ownership and before proposing a solution, classify research need as exactly one of:
 
-This evaluation is mandatory, but conducting research is optional.
+- `SKIP_RESEARCH` — the default for approved implementation, bug fixes, regressions, scoped refactors, performance, infrastructure, and security fixes, or whenever authoritative requirements and repository evidence suffice. Do not invoke competitor research tools or REA.
+- `LIGHT_RESEARCH` — public product patterns, documentation, or observable behavior could materially improve an unresolved UX, workflow, or product decision. Bounded to that decision; no REA by default.
+- `DEEP_RESEARCH_REA` — only when a substantial product/architecture decision remains unresolved, ordinary research cannot answer it, accessible technical artifacts could add meaningful evidence, and analysis is legally permissible, authorized, and safe.
 
-Do not rerun this gate for every message or implementation iteration of an already approved task.
+The classification is mandatory; conducting research is optional. Do not rerun the gate for every message or iteration of an already approved task. Never block a well-defined task because REA is unavailable.
 
-Apply the gate after determining task ownership and before proposing a new solution. Preserve the existing Digvation instruction hierarchy, agent routing, approval boundaries, and implementation workflow.
+Before any `LIGHT_RESEARCH` or `DEEP_RESEARCH_REA` work begins, read [standards/COMPETITOR_RESEARCH_STANDARD.md](standards/COMPETITOR_RESEARCH_STANDARD.md) and follow its discovery, evidence, REA security, integration, and reporting procedure. It applies identically to Claude Code, Codex, and other agents.
 
-### Research classification
+Non-negotiable regardless of classification:
 
-Select exactly one outcome.
-
-**SKIP_RESEARCH**
-
-Choose when the task is an approved implementation, bug fix, regression, internal refactor, performance optimization, infrastructure change, security fix, or otherwise has sufficient authoritative requirements and repository evidence.
-
-Do not invoke competitor research tools or REA. Continue the existing workflow.
-
-**LIGHT_RESEARCH**
-
-Choose when external product patterns, public documentation, screenshots, or observable behavior could materially improve a UX, workflow, or product decision.
-
-Use approved browser, documentation, or existing research capabilities.
-
-Keep the investigation bounded to unresolved decision questions. Do not invoke REA by default.
-
-**DEEP_RESEARCH_REA**
-
-Choose only when all of the following apply:
-
-- A substantial product or architectural decision remains unresolved.
-- Ordinary research cannot adequately answer the important questions.
-- Accessible external technical artifacts could provide meaningful additional evidence.
-- Analysis is legally permissible, appropriately authorized, and safe.
-
-REA remains optional. This classification does not itself authorize reverse engineering or software execution.
-
-When REA is unavailable or unjustified, use conventional research where useful. Never block an otherwise well-defined task solely because REA is unavailable.
-
-Escalation from LIGHT_RESEARCH requires a demonstrated evidence gap and a concrete decision that deeper investigation could affect.
-
-### Autonomous competitor discovery
-
-When `LIGHT_RESEARCH` or `DEEP_RESEARCH_REA` is justified, discover relevant competitors or reference products independently. **Do not require the user to supply competitor names** unless the task expressly targets named products or indispensable selection criteria cannot be established.
-
-1. Define the business category, target geography/market, customer segment, and precise feature or product-decision question. Derive these from the authorized task and existing context; request clarification only for genuinely essential missing information.
-2. Reuse current research artifacts and handoffs first. Otherwise, discover candidates using approved public search, product documentation, demonstrations, and other lawful research sources.
-3. For tasks concerning Digvation's Indonesian customers, prioritize **Indonesian-market relevance**, without excluding a materially better international reference.
-4. Select **up to three** strong references by default. Rank them by verified relevance to the feature and customer workflow, **not brand popularity**. Expand only if a concrete evidence gap warrants it.
-5. Verify that each selected product actually supports the specific feature under investigation using accessible, credible evidence. Exclude or mark unverified candidates rather than inventing capabilities.
-6. Examine public documentation, product demonstrations, observable UX, and credible user feedback where relevant. Preserve source links and distinguish claims from direct observations according to the evidence classifications below.
-7. Identify the unresolved technical or behavioral questions that public research cannot answer. Escalate to REA **only if** deeper evidence could materially change the decision and every existing REA authorization, artifact-access, isolation, and security condition is satisfied.
-8. Compare supported findings with Digvation's actual domain contracts, architecture, requirements, and accepted user flows; do not presume competitor architecture or behavior is superior.
-9. Recommend `ADOPT`, `ADAPT`, `REJECT`, or `DEFER`, with cited evidence, confidence, and explicit advantages/trade-offs. Request approval before any scope or policy change.
-
-`SKIP_RESEARCH` does not invoke this workflow. Do not perform reverse engineering to satisfy a checklist; if no trustworthy reference is found, report the limitation instead of guessing. Stop researching when sufficient decision-quality evidence exists.
-
-### REA discovery and security
-
-Before invoking REA:
-
-1. Discover the actual installed REA integration and documented tool capabilities.
-2. Verify access, authorization, and artifact provenance.
-3. Prefer isolated, read-only analysis.
-4. Never automatically install REA, packages, analysis engines, or MCP servers.
-5. Never bypass authentication, DRM, licensing, rate limits, or access controls.
-6. Never collect unauthorized credentials, customer data, or proprietary information.
-7. Never execute untrusted binaries on a development host without explicit approval and appropriate isolation.
-8. Never expose production secrets, environment variables, database credentials, SSH keys, or Docker socket access.
-
-If required permissions, tools, or isolation are unavailable, report the limitation and continue safely where possible.
-
-Do not reverse engineer an external product merely because it is technically possible.
-
-### Evidence requirements
-
-Classify findings as:
-
-- `OBSERVED`: directly verified external product behavior.
-- `VERIFIED_TECHNICAL`: supported by accessible technical evidence.
-- `INFERRED`: reasoned but not independently verified.
-- `UNKNOWN`: insufficient evidence.
-
-For decision-relevant findings, record the reference product, behavior or capability, evidence source, confidence, relevance to Digvation, advantages, and trade-offs.
-
-Never present inferred architecture as verified fact.
-
-Do not copy proprietary code or protected assets. Research should inform independently designed Digvation solutions.
-
-### Digvation integration
-
-After useful research, compare findings with existing Digvation architecture and approved behavior.
-
-Use Graphify / Codebase Memory / repository MCP for targeted inspection of the affected contracts, modules, schemas, and tests.
-
-Preserve existing domain authority, Runtime/Web boundaries, Dedicated-first entitlement policies, RBAC, tenant/location isolation, financial invariants, stable UI patterns, and accepted API contracts.
-
-A competitor's implementation is evidence, not architectural authority.
-
-The Orchestrator may recommend:
-
-`ADOPT | ADAPT | REJECT | DEFER`
-
-An external finding never automatically authorizes a change to product requirements or implementation scope.
-
-### Skill and agent routing
-
-Preserve all existing mandatory skill discovery, reading, and application requirements.
-
-For frontend/UI/UX tasks, apply both `frontend-design` and `ui-ux-pro-max` according to the current Digvation execution standard, alongside the Digvation Design System.
-
-Use relevant specialized agents only for bounded, nonduplicative research.
-
-REA does not replace implementation skills, architectural analysis, or security review.
-
-### Context and token discipline
-
-- Prefer existing research and accepted decisions.
-- Never repeat competitor research without a material evidence gap or staleness.
-- Avoid broad repository scans or redundant agent investigations.
-- Read only the evidence needed for the current decision.
-- Stop when sufficient decision-quality evidence is available.
-- Summarize findings instead of dumping large technical outputs.
-- Apply `DELTA ONLY — NO SCOPE CREEP` throughout.
-
-### Reporting and approval
-
-Evaluate the gate internally for each new task. For routine SKIP_RESEARCH tasks, do not add unnecessary reporting.
-
-When research materially affects a decision, report concisely:
-
-`RESEARCH_GATE: SKIP_RESEARCH | LIGHT_RESEARCH | DEEP_RESEARCH_REA`
-
-`RESEARCH_REASON:` Why research was or was not needed.
-
-`EVIDENCE:` Verified findings, sources, and confidence.
-
-`DIGVATION_IMPACT:` Recommended implications for existing behavior.
-
-`DECISION: ADOPT | ADAPT | REJECT | DEFER | NOT_APPLICABLE`
-
-`APPROVAL_REQUIRED: YES | NO`
-
-The Orchestrator may classify, investigate, delegate bounded research, compare evidence, and recommend decisions.
-
-It must not independently expand an approved task, change established policies, install tools, modify protected databases or infrastructure, commit, push, merge, or deploy.
-
-Stop at `READY_FOR_MANUAL_REVIEW` when product, architecture, scope, tool installation, or authorization decisions require approval.
-
-All existing Digvation implementation, Git, migration, release, and deployment approval gates remain unchanged.
+- `DEEP_RESEARCH_REA` does not itself authorize reverse engineering or software execution. REA is never automatically installed, executed, or granted access; its authorization, artifact provenance, and isolation must be verified first.
+- Never install tools, packages, analysis engines, or MCP servers automatically; never execute untrusted binaries without explicit approval and isolation.
+- Never bypass authentication, DRM, licensing, rate limits, or access controls; never collect unauthorized credentials, customer data, or proprietary information; never expose secrets, environment variables, database credentials, SSH keys, or Docker socket access.
+- Do not reverse engineer merely because it is technically possible, and do not copy proprietary code or protected assets.
+- Research is evidence, not authority. It may support an `ADOPT / ADAPT / REJECT / DEFER` recommendation but never changes requirements, policy, or implementation scope by itself. Sensitive or scope-expanding actions require explicit approval; stop at `READY_FOR_MANUAL_REVIEW` when such a decision is needed.
+- Research never relaxes implementation, Git, migration, release, or deployment approval gates.
 
 ## 4. Reuse before creating
 
@@ -540,10 +408,16 @@ Durable business scope belongs in the applicable `scopes/\<SCOPE>.md` contract. 
 
 Do **not** recursively read all standards/docs before ordinary work.
 
+`README.md` at the lifecycle root is the navigation entry: repository map and a task-routing table naming what to read and skip per task type.
+
 Read:
 
 - `standards/ECOSYSTEM_ARCHITECTURE.md` for cross-product, client/install, entitlement, deployment-model, or ownership-sensitive work;
 - `standards/ENGINEERING_STANDARD.md` when changing structure/shared abstractions or when repository conventions are unclear;
+- `standards/UI_UX_STANDARD.md` for frontend appearance, layout, form, state, interaction, responsive, or accessibility changes;
+- `standards/COMPETITOR_RESEARCH_STANDARD.md` only after classifying `LIGHT_RESEARCH` or `DEEP_RESEARCH_REA` (§3A), before research begins;
+- `docs/CURRENT_PLATFORM.md` when a decision depends on what is currently implemented, released, or deployed (re-verify time-sensitive facts);
+- `docs/LANGUAGE_AND_TERMINOLOGY.md` when interpreting Indonesian product/UI terms;
 - `standards/DELIVERY_RELEASE_STANDARD.md` at commit/merge/version/release/deploy gates;
 - `standards/INFRASTRUCTURE_STANDARD.md` for server, Installation, ingress, backup, monitoring, migration, or client-managed infrastructure work;
 - `standards/CLIENT_INSTALLATION_STANDARD.md` for client onboarding, Dedicated Digvation infra, Dedicated client infra, SaaS, handover, or Installation production acceptance;
@@ -681,6 +555,16 @@ Do not load multiple unrelated specialist skills. For frontend/UI/UX work, `fron
 Discover, read, and genuinely apply relevant installed skills. If a required skill is unavailable, report the attempted discovery and the fallback; never claim to have used it.
 
 Prefer implicit skill selection so normal user requests remain concise.
+
+## 18. Language contract
+
+The user normally writes in Indonesian, often with informal product/operational terms.
+
+- Discuss with the user in Indonesian (follow the user's language).
+- Write implementation prompts, agent handoffs, and commit/PR text in clear technical English.
+- Keep source identifiers, API fields, and enum values unchanged; keep Indonesian UI copy localized as implemented.
+- Interpret Indonesian terms through existing Digvation domain definitions (`docs/LANGUAGE_AND_TERMINOLOGY.md` and the owning scope), never by literal translation into different business behavior.
+- A wording variation is not authorization for broader implementation. When one Indonesian word maps to several domain states, confirm which one from context before acting.
 
 ## Codebase Memory
 

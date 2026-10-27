@@ -74,7 +74,7 @@ Examples, subject to current accepted implementation:
 
 General movement after or beyond the Cashier Session boundary, such as cash deposit, account transfer, expense, bank/e-wallet movement, settlement, or reconciliation, belongs to Finance / Financial Operations.
 
-The current historical `apps/cashier` implementation is the existing POS contribution to Digvation Operational.
+The current `apps/operational` implementation (formerly `apps/cashier`) is the existing POS contribution to Digvation Operational.
 
 ## Dashboard Projection
 
@@ -106,6 +106,19 @@ Report execution must query authoritative POS contracts/projections and preserve
 Current accepted POS implementation remains authoritative and must be discovered from Codebase Memory MCP plus actual repository source before changes.
 
 The current near-term platform focus may include integration with Workforce and Customer/Membership, but those are not owned by POS.
+
+Current capability/release snapshot: [docs/CURRENT_PLATFORM.md](../docs/CURRENT_PLATFORM.md).
+
+### Sale status semantics
+
+Verified in Runtime source on 2026-10-27 (`SaleStatus`, `SaleOperationalState`, `SaleReversal` in `prisma/schema.prisma`; `sales.service.ts`).
+
+- `SaleStatus` is `OPEN`, `FINALIZED`, or `VOIDED`. `SaleOperationalState` (`UNSUBMITTED`, `QUEUED`, `IN_PROGRESS`) tracks operational work separately from settlement status.
+- **Void** applies only to a Sale that is not completed and sets `VOIDED`.
+- **Reversal** applies to a `FINALIZED` Sale. The Sale stays `FINALIZED`; an append-only `SaleReversal` record (reason, actor, time) is added. Successful payments must be refunded first, and loyalty earned/used is compensated through the Loyalty contract.
+- Both outcomes are presented to users as an effective cancellation ("Dibatalkan"). A reversed `FINALIZED` Sale must never be rewritten to `VOIDED`, and history/reports must keep the two facts distinguishable.
+
+Indonesian presentation terms (Sesuaikan pesanan, Bayar sebagian, Antrian, Selesai, Dibatalkan) are mapped in [docs/LANGUAGE_AND_TERMINOLOGY.md](../docs/LANGUAGE_AND_TERMINOLOGY.md).
 
 ## Deferred / Future
 

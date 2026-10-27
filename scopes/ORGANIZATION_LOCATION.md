@@ -70,7 +70,7 @@ Potential shared Backoffice capabilities include:
 - domain capability/configuration references attached to a location where explicitly owned elsewhere;
 - assignment targets used by Workforce and business domains.
 
-Exact navigation must follow current application scope and `uiuxpromax`.
+Exact navigation must follow current application scope and [UI_UX_STANDARD.md](../standards/UI_UX_STANDARD.md) (both `frontend-design` and `ui-ux-pro-max`).
 
 ## Business Configuration Boundary
 

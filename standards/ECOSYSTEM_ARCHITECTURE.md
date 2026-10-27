@@ -393,7 +393,7 @@ Promotion may provide temporary discount/member/bonus-point outcomes, while norm
 
 The durable detailed contract lives in `scopes/PROMOTION_COMMERCIAL.md`.
 
-## 11. Scope contracts are the living domain catalog
+## 10A. Scope contracts are the living domain catalog
 
 Durable product/domain/module scope is maintained under `scopes/`.
 
@@ -729,14 +729,24 @@ Current semantic mapping is:
 ```text
 Existing repository/path            Current project meaning
 -----------------------------------------------------------------------
-digvation-business-web                   Digvation Business Web
-apps/backoffice                     Digvation Backoffice experience
-apps/cashier                        current POS Operational implementation
-                                    and migration source for Operational
+core-v2                             Digvation CORE control-plane API
+digvation-core-ui                   Digvation CORE operator console
 
-digvation-business-runtime               Digvation Business Runtime (current
+digvation-business-web              Digvation Business Web
+  apps/backoffice                   Digvation Backoffice experience
+  apps/operational                  Digvation Operational experience; current
+                                    POS Operational implementation (formerly
+                                    apps/cashier)
+  apps/member-portal                Customer-facing Member Portal (Membership)
+
+digvation-business-runtime          Digvation Business Runtime (current
                                     backend implementation / migration source)
+
+digvation-infrastructure            Reusable infrastructure/Installation
+                                    automation (no product logic)
 ```
+
+The lifecycle root `README.md` keeps the workspace path, branch, and ownership map for these repositories.
 
 The target project vocabulary is:
 
@@ -771,7 +781,7 @@ When boundaries are changed:
 - preserve accepted behavior and data semantics;
 - do not maintain duplicate old/new authorities;
 - do not rebuild accepted POS features merely because POS is now one domain inside the Business Platform;
-- current `cashier` implementation remains the first POS Operational experience;
+- current `apps/operational` implementation (formerly `apps/cashier`) remains the first POS Operational experience;
 - current Backoffice remains the foundation of the shared Backoffice experience.
 
 The architecture change is an ownership/composition change, not permission to restart the product.

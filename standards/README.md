@@ -38,6 +38,8 @@ Read standards conditionally:
 
 - ecosystem/domain/client/entitlement/composition behavior -> `ECOSYSTEM_ARCHITECTURE.md`
 - architecture/tree/naming/refactor -> `ENGINEERING_STANDARD.md`
+- frontend UI/UX appearance, layout, forms, states, accessibility -> `UI_UX_STANDARD.md`
+- `LIGHT_RESEARCH` / `DEEP_RESEARCH_REA` classified under root `AGENTS.md` §3A -> `COMPETITOR_RESEARCH_STANDARD.md` (never for `SKIP_RESEARCH`)
 - commit/merge/version/release/deploy -> `DELIVERY_RELEASE_STANDARD.md`
 - server/infra -> `INFRASTRUCTURE_STANDARD.md`
 - client deployment -> `CLIENT_INSTALLATION_STANDARD.md`
@@ -45,6 +47,10 @@ Read standards conditionally:
 - new system/product/domain -> `NEW_PRODUCT_STANDARD.md` + `../scopes/README.md`
 - business feature/domain work -> applicable `../scopes/<SCOPE>.md` only
 - strategic direction -> `ECOSYSTEM_ROADMAP.md`
+- what is implemented/released/deployed now -> `../docs/CURRENT_PLATFORM.md` (dated snapshot; re-verify)
+- Indonesian product/UI terms -> `../docs/LANGUAGE_AND_TERMINOLOGY.md`
+
+The task-routing table in `../README.md` combines these triggers per task type.
 
 `PROMPT_LIBRARY.md` is the user's copy/paste toolbox and is not routine agent study material.
 

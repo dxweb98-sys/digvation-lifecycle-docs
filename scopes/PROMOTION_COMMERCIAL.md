@@ -11,7 +11,7 @@ Monetary Promotion management/evaluation and member-only eligibility have accept
 
 Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `1190ec6d9b21628a23af78e299beb576c1f75c27` [types](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/promotions/promotion.types.ts) and [evaluator](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/promotions/promotion.policy.ts); Web `48341a9949f04f048d39e628ab33605b82dcea25` [management model](https://github.com/dxweb98-sys/digvation-business-web/blob/48341a9949f04f048d39e628ab33605b82dcea25/apps/backoffice/src/modules/promotions/promotion-editor-form.ts).
 
-Release/deployment: `NOT_VERIFIED` here. Client availability still requires effective `PROMOTIONS`, permission/location scope, and Membership context for member-only benefits. Commercial bundling and scope status do not enable a client. Wider benefit/projection examples below remain envelope unless included in the verified `Current Scope`.
+Release: the evidence SHAs above are included in Runtime/Web `v1.6.1` (`main`, released 2026-10-23; verified 2026-10-27). Deployment to client Installations: `NOT_VERIFIED`. Client availability still requires effective `PROMOTIONS`, permission/location scope, and Membership context for member-only benefits. Commercial bundling and scope status do not enable a client. Wider benefit/projection examples below remain envelope unless included in the verified `Current Scope`.
 
 ## Purpose
 

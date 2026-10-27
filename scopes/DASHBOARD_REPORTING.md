@@ -120,7 +120,7 @@ Do not produce a cross-domain report by directly joining another domain's tables
 
 Dashboard and Reports primarily live in Backoffice.
 
-The exact navigation and information hierarchy must be composed from available domains and permissions and must use `uiuxpromax` for UI/UX implementation.
+The exact navigation and information hierarchy must be composed from available domains and permissions and must follow [UI_UX_STANDARD.md](../standards/UI_UX_STANDARD.md) (both `frontend-design` and `ui-ux-pro-max`) for UI/UX implementation.
 
 ## Operational Contribution
 

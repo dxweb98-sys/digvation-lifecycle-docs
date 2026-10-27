@@ -11,7 +11,7 @@ The accepted `dev` subset is tenant-level Business tax configuration (enabled/ra
 
 Evidence (verified 2026-10-16, Asia/Jakarta): Runtime `1190ec6d9b21628a23af78e299beb576c1f75c27` [configuration/default](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/business-configuration/business-configuration.repository.ts), [configuration service](https://github.com/dxweb98-sys/digvation-business-runtime/blob/1190ec6d9b21628a23af78e299beb576c1f75c27/src/modules/business-configuration/business-configuration.service.ts), and accepted [reporting change](https://github.com/dxweb98-sys/digvation-business-runtime/commit/ecf7712215d99fa9e8bf4120c53c05e58769f8c2); Web accepted [Business tax configuration change](https://github.com/dxweb98-sys/digvation-business-web/commit/d6e486268c702e23d45388c8339bed070dd9c938) remains in `dev` at `48341a9949f04f048d39e628ab33605b82dcea25`.
 
-Release/deployment: `NOT_VERIFIED` here. A client's effective `TAX_FISCAL` grant is separate from the tenant Business tax enabled/rate settings and from this scope's maturity. No source snapshot establishes a live client's tax setup.
+Release: the evidence SHAs above are included in Runtime/Web `v1.6.1` (`main`, released 2026-10-23; verified 2026-10-27). Deployment to client Installations: `NOT_VERIFIED`. A client's effective `TAX_FISCAL` grant is separate from the tenant Business tax enabled/rate settings and from this scope's maturity. No source snapshot establishes a live client's tax setup.
 
 ## Commercial Availability / Effective Entitlement
 

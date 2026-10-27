@@ -94,7 +94,7 @@ Audit/Activity contributes a shared Backoffice activity surface, conceptually su
 
 The UI should prioritize readable business-semantic activity rather than raw request logs.
 
-Any Audit/Activity UI work must use `uiuxpromax` and the existing Digvation Design System.
+Any Audit/Activity UI work must follow [UI_UX_STANDARD.md](../standards/UI_UX_STANDARD.md), applying both `frontend-design` and `ui-ux-pro-max`, and the existing Digvation Design System.
 
 ## Operational Contribution
 
