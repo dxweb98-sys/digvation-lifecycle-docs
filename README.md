@@ -38,7 +38,7 @@ Lifecycle-owned folders:
 | --- | --- | --- |
 | [standards/](standards/README.md) | Ecosystem, engineering, UI/UX, delivery, infrastructure, installation, security standards | Only the standard whose trigger applies |
 | [scopes/](scopes/README.md) | One durable scope contract per domain/foundation/capability | Only the one or two contracts the task touches |
-| [docs/](docs/) | Current platform inventory and language/terminology reference | When the task needs current-state facts or Indonesian terms |
+| [docs/](docs/) | Current platform inventory, language/terminology reference, and architecture decision records (`docs/adr/`) | When the task needs current-state facts, Indonesian terms, or an accepted architecture decision |
 | `.claude/skills/`, `.agents/skills/` | Digvation routing skills for Claude Code and Codex | Loaded by the tool when their trigger matches |
 | `handoffs/` (create only when needed) | Task-specific handoff for an active task; remove it once the task is accepted, since Git history keeps it | Only when the user supplies that handoff |
 
@@ -52,7 +52,7 @@ Always: the applicable `AGENTS.md` hierarchy (root + nested repository). Then re
 | --- | --- | --- | --- | --- |
 | POS bug or feature | [scopes/POS.md](scopes/POS.md) + one touched capability scope; Runtime/Web nested `AGENTS.md` | Infra, installation, security standards unless triggered | `digvation-router`, `digvation-debug` or `digvation-feature` | Commit, push, PR, merge, migrations |
 | UI / UX change | [standards/UI_UX_STANDARD.md](standards/UI_UX_STANDARD.md) + owning scope | Release/infra standards | `digvation-ui`, `frontend-design`, `ui-ux-pro-max` | Same as above; no new UI libraries |
-| Entitlement / capability availability | [ECOSYSTEM_ARCHITECTURE.md](standards/ECOSYSTEM_ARCHITECTURE.md) §15, [scopes/README.md](scopes/README.md), the capability's scope, Runtime `src/config/entitlement-manifest.ts` | Unrelated scopes | `digvation-router`, `digvation-security` | Any new entitlement code, permission, or contract is a product decision |
+| Entitlement / capability availability | [ECOSYSTEM_ARCHITECTURE.md](standards/ECOSYSTEM_ARCHITECTURE.md) §15, [scopes/README.md](scopes/README.md), [ADR 0001](docs/adr/0001-commercial-offerings-and-operational-applications.md) for offerings/application grants, the capability's scope, Runtime `src/config/entitlement-manifest.ts` | Unrelated scopes | `digvation-router`, `digvation-security` | Any new entitlement code, permission, or contract is a product decision |
 | Commit, merge, release, staging, production | [DELIVERY_RELEASE_STANDARD.md](standards/DELIVERY_RELEASE_STANDARD.md); for an Installation also [CLIENT_INSTALLATION_STANDARD.md](standards/CLIENT_INSTALLATION_STANDARD.md) / [INFRASTRUCTURE_STANDARD.md](standards/INFRASTRUCTURE_STANDARD.md) | Scopes, UI standard | `digvation-release` | Every Git write, promotion, and deployment is approved separately |
 | Auth, RBAC, tenant isolation, money, payments, refunds | Owning scope + [SECURITY_ACCEPTANCE_STANDARD.md](standards/SECURITY_ACCEPTANCE_STANDARD.md) when a security gate applies | UI standard unless UI changes | `digvation-security` + task skill | DB writes, migrations, test-DB resets |
 | Indonesian-language request | [docs/LANGUAGE_AND_TERMINOLOGY.md](docs/LANGUAGE_AND_TERMINOLOGY.md), then route by the actual task above | Translating terms into new behavior | As routed | As routed |

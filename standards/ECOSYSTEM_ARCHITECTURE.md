@@ -38,8 +38,8 @@ The canonical architecture has four independent layers:
 These layers must not be collapsed into each other.
 
 - CORE does not become the operational backend.
-- Backoffice and Operational are not separately sold business products.
-- POS, Workshop, Inventory, and future domains do not own their own duplicate UI shells.
+- Backoffice is never sold separately. Operational applications are granted through commercial offerings; they are not business domains ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md)).
+- POS, Workshop, Inventory, and future domains do not own UI shells. An operational application composes domain behavior; it never owns domain authority.
 - deployment mode, infrastructure ownership, branding, product entitlement, and optional capability/add-on entitlement are separate concerns.
 
 ## 2. System boundary vocabulary
@@ -190,7 +190,7 @@ It receives explicit business references/reasons such as `SALE` or `WORK_ORDER` 
 
 ## 5. Backoffice and Operational are shared experiences
 
-Backoffice and Operational are platform experiences, not one application per business type.
+Backoffice and Operational are platform experiences. Operational applications come from granted commercial offerings, never from a client's business type.
 
 A client with POS + Inventory may see:
 
@@ -221,11 +221,17 @@ Operational
 - Inventory Operations (when permitted)
 ```
 
-A client with POS + Workshop + Inventory may use modules from all three domains in the same two experience shells.
+A client with POS + Workshop + Inventory uses modules from all three domains in the one Backoffice and in its granted operational applications.
 
-Do not create a separate permanent `Workshop Backoffice`, `POS Backoffice`, `Mechanic App`, or `Warehouse App` when the capability belongs inside the shared Backoffice or Operational experience.
+There is exactly one Backoffice. Do not create a `Workshop Backoffice`, `POS Backoffice`, or any other product-specific management shell.
 
-A separately deployable frontend is justified only by a real runtime/device/security/operational boundary, not by product naming alone.
+The Operational experience may be delivered by more than one independently identifiable operational application (for example POS Salon, a future POS Laundry, or an Inventory application) when an accepted commercial offering grants it and its workflow genuinely differs. Rules:
+
+- Application identity is not domain ownership. All POS applications use the same `POS` domain and financial authority in one Runtime tenant.
+- Using an application requires the client's application grant and the user's application access, validated server-side together with business permissions and tenant/location authorization. UI presence and client-controlled headers never authorize it.
+- A new application needs an accepted offering and application grant. Product naming alone, or a capability that fits an existing application, does not justify one.
+
+The offering → domain → application → capability model, deployment target, and prerequisites are defined in [ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md).
 
 ## 6. Experience composition authority
 
@@ -241,6 +247,8 @@ INTERSECT Installation Runtime Capability
 INTERSECT User Permission
 INTERSECT Location / Operational Context
 ```
+
+Application-exclusive Operational functionality additionally requires the client's application grant and the user's application access, both validated by Runtime ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md)).
 
 Where a tenant has configured a safe dashboard/report visibility preference, it
 is an additional final intersection that may hide content only. It cannot grant
@@ -534,7 +542,12 @@ PRODUCT ENTITLEMENT
 
 CAPABILITY ENTITLEMENT
   optional reusable capabilities such as FINANCE_OPERATIONS, PROMOTIONS, LOYALTY_POINTS, TAX_FISCAL, or future add-ons
+
+APPLICATION GRANT
+  which operational applications the tenant may use (target model; not yet implemented)
 ```
+
+Commercial offerings (what a client buys, such as POS Salon) are CORE concepts. CORE maps each offering to domain grants, application grants, and included capabilities through an explicit contract; offering codes are never sent to Runtime as product codes ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md)).
 
 A SaaS plan/package may bundle products and capabilities. Commercial packaging is not the runtime authorization contract. CORE/control-plane is the central resolution authority; current Dedicated-first deployment configuration is the supported local source described above. Both modes supply one explicit **effective entitlement set** consumed by trusted runtimes.
 
@@ -627,6 +640,8 @@ Client
 Implementation may retain existing identifiers/relationships while the codebase is migrated, but new architecture decisions must follow this semantic model.
 
 Installation composition must not activate a business domain or optional capability without the applicable effective entitlement.
+
+An Installation hosts one Runtime tenant per client business, one Backoffice, and the operational application artifacts for its granted applications. The target runtime binding is Installation-centered rather than tied to one purchased product ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md), decision gate G2).
 
 ## 17. Deployment dimensions
 
@@ -841,8 +856,10 @@ Preserve these ecosystem invariants:
 
 - CORE = control plane.
 - Business domains = operational authority.
-- Backoffice = shared management experience.
-- Operational = shared execution experience.
+- Backoffice = one shared management experience.
+- Operational = shared execution experience, delivered by one or more granted operational applications.
+- Commercial offering != business domain; operational application != domain authority.
+- One POS financial authority per client business, regardless of how many POS applications it uses.
 - Product/capability entitlement != business profile.
 - Product/capability entitlement != deployment isolation.
 - Product/capability entitlement != infrastructure ownership.

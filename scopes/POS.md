@@ -76,6 +76,8 @@ General movement after or beyond the Cashier Session boundary, such as cash depo
 
 The current `apps/operational` implementation (formerly `apps/cashier`) is the existing POS contribution to Digvation Operational.
 
+Several operational applications (for example POS Salon and a future POS Laundry) may consume POS. They share this one POS domain, its permissions, and its financial authority in one Runtime tenant; none owns a separate Sale, payment, or Cashier Session authority. Application identity and origin attribution are prerequisites before a second POS application handles production money ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md)).
+
 ## Dashboard Projection
 
 POS may contribute metrics such as:

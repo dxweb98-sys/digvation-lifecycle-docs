@@ -117,6 +117,8 @@ Current `apps/operational` (formerly `apps/cashier`) is the existing POS Operati
 
 Do not create product-specific permanent UI shells merely because a new business domain is added.
 
+Accepted direction (in principle): independently purchased and deployable operational applications, such as POS Salon, a future POS Laundry, and Inventory, share one Backoffice, reusable domains, and one POS financial authority. The existing `apps/operational` build stays the grandfathered legacy application during transition. See [ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md); its decision gates and prerequisites apply before implementation.
+
 ## Dashboard and reporting direction
 
 Dashboard and Reports are shared composition/projection experiences.

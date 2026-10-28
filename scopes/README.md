@@ -45,6 +45,8 @@ The verified delivery sections below were reconciled on 2026-10-16 (Asia/Jakarta
 
 Every durable scope must declare how availability is controlled. Do not infer availability from source-code presence, business type, deployment mode, or branding.
 
+Entitlement classes describe Runtime domain and capability grants. Commercial offerings (for example POS Salon) and operational application grants are separate layers defined in [ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md); an offering is never a scope or a Runtime product key.
+
 Use these `Entitlement Class` values:
 
 - `PLATFORM_FOUNDATION` — required/shared platform foundation. It is not automatically a separately sold product, although visibility and actions still require context/permission.
