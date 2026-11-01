@@ -65,7 +65,9 @@ CUSTOMER_IDENTITY
   -> shared reusable customer reference
 
 CUSTOMER_MANAGEMENT
-  -> optional customer-management surface
+  -> no separate capability (ADR 0001 G7): standard customers come with the
+     offering through CUSTOMER_IDENTITY; member/loyalty customer management comes
+     with MEMBERSHIP / LOYALTY_POINTS
 
 MEMBERSHIP
   -> member enrollment/status/identity

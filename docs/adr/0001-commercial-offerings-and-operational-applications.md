@@ -141,7 +141,7 @@ Technical binding migration and commercial migration are separate work units wit
 | G4 | How user application access is represented (dedicated permission, role scope, or another RBAC form) |
 | G5 | Records requiring origin attribution beyond Sale |
 | G6 | POS Laundry base contents and any Laundry-specific authoritative state |
-| G7 | Meaning of CORE `CUSTOMER_MANAGEMENT` |
+| G7 | Meaning of CORE `CUSTOMER_MANAGEMENT`. **Resolved 2026-11-01:** standard customer records (identity and contact used in transactions) are included with any offering that needs customers, through the shared Customer foundation (`CUSTOMER_IDENTITY`). Customer management for members and loyalty belongs to the Customer Engagement add-on (`MEMBERSHIP`, `LOYALTY_POINTS`). There is no separate customer-management capability; CORE's `CUSTOMER_MANAGEMENT` code grants nothing on its own. |
 | G8 | WhatsApp receipt usage pricing |
 | G9 | Scheduling as a standalone offering or bundled application |
 
