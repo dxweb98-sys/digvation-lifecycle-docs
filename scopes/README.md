@@ -170,7 +170,6 @@ SCHEDULING             PRODUCT              PRODUCT
 PROMOTIONS             CAPABILITY           ADD_ON_CAPABLE
 LOYALTY_POINTS          CAPABILITY           ADD_ON_CAPABLE
 TAX_FISCAL              CAPABILITY           BUNDLED_OR_OPTIONAL
-CUSTOMER_MANAGEMENT     CAPABILITY           BUNDLED_OR_OPTIONAL
 MEMBERSHIP              CAPABILITY           BUNDLED_OR_OPTIONAL
 FINANCE_OPERATIONS      CAPABILITY           ADD_ON_CAPABLE
 
@@ -180,7 +179,10 @@ Operational Access      PLATFORM_FOUNDATION  BASE
 Audit/Activity          PLATFORM_FOUNDATION  BASE
 Catalog foundation      PLATFORM_FOUNDATION  BASE
 Workforce foundation    PLATFORM_FOUNDATION  BASE
+Customer foundation     PLATFORM_FOUNDATION  BASE
 Dashboard/Reporting     EXPERIENCE           N/A
 ```
+
+There is no separate customer-management capability ([ADR 0001](../docs/adr/0001-commercial-offerings-and-operational-applications.md) G7): standard customers come with the offering through the Customer foundation, and member/loyalty customer management comes with `MEMBERSHIP` / `LOYALTY_POINTS`. CORE's `CUSTOMER_MANAGEMENT` code grants nothing on its own.
 
 This matrix describes entitlement shape, not final pricing. `ADD_ON_CAPABLE` means the capability can be sold separately or bundled. A future commercial decision may change packaging without changing domain ownership.
