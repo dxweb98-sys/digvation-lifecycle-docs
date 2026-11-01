@@ -49,12 +49,12 @@ Effective capabilities = ∪ included capabilities of ACTIVE offerings
 
 | Offering | Domain grant | Application grant | Included capabilities |
 | --- | --- | --- | --- |
-| POS Salon | `POS` | `POS_SALON_APP` | All currently accepted core Operational POS behavior: Product and Service selling, queue, performers, order adjustment, payments including partial settlement and split payment, correction, refund, reversal, receipts, Cashier Session, Product Commission, Service Composition, Workforce, basic business-level tax, shared foundations, basic reporting |
+| POS Salon | `POS` | `POS_SALON_APP` | All currently accepted core Operational POS behavior: Product and Service selling, queue, performers, order adjustment, payments including partial settlement and split payment, correction, refund, reversal, receipts, Cashier Session, Product Commission, Service Composition, Workforce, basic business-level tax, shared foundations, basic reporting. **Included capability keys (2026-11-01):** `POS_PRODUCT_SALES`, `POS_SERVICE_SALES`, `POS_PRODUCT_COMMISSION`, `CATALOG_SERVICE_COMPOSITION`, `EMPLOYEE_WORKFORCE`, `TAX_FISCAL`. `BUSINESS_ANALYTICS` is not included; basic reporting does not require it ([ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md) D4). |
 | POS Laundry (future) | `POS` | `POS_LAUNDRY_APP` | **Decision gate G6** |
 | Inventory | `INVENTORY` | `INVENTORY_APP` (if an operational app is justified) | Per [scopes/INVENTORY.md](../../scopes/INVENTORY.md) |
 | Workshop | `WORKSHOP` | Workshop application | Per [scopes/WORKSHOP.md](../../scopes/WORKSHOP.md) |
 
-Shared add-on candidates: Customer Engagement (`MEMBERSHIP`, `LOYALTY_POINTS`, `PROMOTIONS`, Member Portal), Attendance (`WORKFORCE_ATTENDANCE`), Multi-Location (`MULTI_BRANCH`), Finance Operations (`FINANCE_OPERATIONS`). WhatsApp receipt pricing is a separate usage-policy decision (**G8**); accepted access is not removed.
+Shared add-on candidates: Customer Engagement (`MEMBERSHIP`, `LOYALTY_POINTS`, `PROMOTIONS`, Member Portal), Attendance (`WORKFORCE_ATTENDANCE`), Multi-Location (`MULTI_BRANCH`), Finance Operations (`FINANCE_OPERATIONS`). **Accepted 2026-11-01** as the four shared add-on packages ([ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md) D3). WhatsApp receipt pricing is a separate usage-policy decision (**G8**); accepted access is not removed.
 
 ### Shared add-on billing
 
@@ -70,12 +70,16 @@ Shared add-ons are billed **once per client** and stay effective while their own
 
 **Decision:** target A. B is acceptable only as an explicitly approved, temporary measure with the lifetime rule enforced in resolution. **Decision gate G1** fixes the schema.
 
+**Resolved 2026-11-01:** G1 = A; the schema is defined in [ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md#client-scoped-shared-add-ons).
+
 ### Installation-centered runtime binding
 
 - The Runtime binding moves from one `ClientProduct` to the **Installation**. An Installation hosts exactly one Runtime tenant per client business; its offerings come from `InstallationProductBinding`.
 - Projection for a Runtime = client effective set limited to offerings bound to that Installation.
 - Runtime CORE sync validates the Installation binding instead of a single `coreClientProductId`.
 - No production CORE data is known (CORE has no release; live CORE data `UNVERIFIED`). The binding change must still ship with a data-migration plan for any existing `RuntimeBinding` rows. **Decision gate G2.**
+
+**Resolved 2026-11-01:** G2 approved; the binding contract and expand/contract migration are defined in [ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md#installation-centered-binding).
 
 ### Application authorization is server-validated
 
@@ -135,8 +139,8 @@ Technical binding migration and commercial migration are separate work units wit
 
 | Gate | Question |
 | --- | --- |
-| G1 | Shared add-on schema: client-scoped add-on subscription design (target), or temporary synthetic anchor |
-| G2 | Installation-centered binding contract and migration of any existing `RuntimeBinding` rows |
+| G1 | Shared add-on schema: client-scoped add-on subscription design (target), or temporary synthetic anchor. **Resolved 2026-11-01:** A, client-scoped shared add-on subscriptions billed once per client; the synthetic anchor (B) is rejected ([ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md)). |
+| G2 | Installation-centered binding contract and migration of any existing `RuntimeBinding` rows. **Resolved 2026-11-01:** approved; `RuntimeBinding` moves to the Installation through an expand/contract migration ([ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md)). |
 | G3 | Commercial treatment of grandfathered clients (keep legacy terms or map to new offerings) |
 | G4 | How user application access is represented (dedicated permission, role scope, or another RBAC form) |
 | G5 | Records requiring origin attribution beyond Sale |
