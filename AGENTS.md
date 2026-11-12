@@ -268,6 +268,8 @@ If approved:
 - follow the accepted-feature finalization flow in `standards/DELIVERY_RELEASE_STANDARD.md`;
 - feature approval does not authorize production deployment.
 
+Every repository follows the review and commit protocol in `standards/DELIVERY_RELEASE_STANDARD.md` §6A: the review report fields, explicit product-owner approval before any commit or push, pre-commit checks and the staged-file refusals, the commit message and push rules, and the fixed `COMMIT SUMMARY`.
+
 ## 7. Git cleanliness
 
 A dirty tree is normal during active work.

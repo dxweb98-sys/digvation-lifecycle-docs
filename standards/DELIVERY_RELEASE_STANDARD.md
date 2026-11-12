@@ -131,6 +131,39 @@ Human approval is explicit.
 
 `READY_FOR_MANUAL_REVIEW != APPROVED`.
 
+## 6A. Review and commit protocol
+
+This protocol applies to every repository under the `lifecycle/` workspace. A repository `AGENTS.md` may add repository-specific rules (checks, excluded paths) but must not weaken it.
+
+1. **Every work unit ends at `READY_FOR_MANUAL_REVIEW`.** The report contains:
+   - the status;
+   - the checks run and their results;
+   - the changed files;
+   - the decisions the agent took on its own;
+   - the decisions still open.
+
+   No commit or push happens before approval.
+2. **Commit and push only after explicit written approval from the product owner**, for example "Approve: commit dan push". A `READY_FOR_MANUAL_REVIEW` report, an implementation request, or an earlier approval for another stage is not that approval.
+3. **Before committing:**
+   - never commit on the repository's default branch or on a shared development branch (for example `master`, `main`, `digvation-core-dev`, `digvation-core-ui-dev`); use a work branch;
+   - run the checks the repository `AGENTS.md` prescribes, and stop if any fails;
+   - refuse and report when the staged set contains `.env` files, `dist/`, ignored generated files, key files or secret folders;
+   - respect repository-specific exclusions (for example the `change_slug` migration folder in core-v2).
+4. **Commit messages use Conventional Commits:** a one-line subject, and a body listing the main changes and, when one applies, the specification version followed. Make one commit per stage. Commit a change to a specification document separately, as `docs: spec vX.Y`.
+5. **Push only to the same work branch on `origin`.** Never force push or push to the default or a shared development branch. Never create or delete a remote branch without approval.
+6. **After committing and pushing, report this fixed summary:**
+
+   ```text
+   COMMIT SUMMARY
+   - Repo and branch
+   - Commit: <hash> <subject>, one line per commit
+   - Files: number changed, insertions, deletions
+   - Checks: result and number of tests
+   - Push: succeeded or failed, to origin/<branch>
+   - Open decisions
+   - Notes for the next stage
+   ```
+
 ## 7. Git cleanliness at gates
 
 Before commit/merge/release/deployment:
