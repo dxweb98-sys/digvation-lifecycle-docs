@@ -1,6 +1,6 @@
 # ADR 0005: Standalone Loyalty Offering and the Loyalty Contract
 
-- **Status:** Proposed (2026-11-19). Decisions D1 to D8 were confirmed by the product owner in discussion on 2026-11-19; items marked **Decision gate** are not final contracts. Acceptance happens on merge of this ADR.
+- **Status:** Accepted (2026-11-19, merged in PR #3). Decisions D1 to D8 were confirmed by the product owner on 2026-11-19. G1 resolved 2026-11-19 (see [G1 resolution](#g1-resolution-codes-and-manifest-key-mapping)); other items marked **Decision gate** are not final contracts.
 - **Refines:** [ADR 0001](0001-commercial-offerings-and-operational-applications.md) (offerings, applications, shared add-ons) and [ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md) D3 (Customer Engagement add-on).
 - **Scope:** Ecosystem architecture, CORE catalog/billing direction, and the Customer/Membership/Loyalty capability contract in [scopes/CUSTOMER_MEMBERSHIP.md](../../scopes/CUSTOMER_MEMBERSHIP.md). Not implementation authority: each step in [Implementation sequence](#implementation-sequence) needs its own approval.
 - **Numbering:** 0003 and 0004 are referenced by `docs/CORE_FUNCTIONAL_SPEC.md` but are not present in this folder; this ADR uses 0005 to avoid a collision.
@@ -47,12 +47,35 @@ Annual prepayment: 10 months for 12. Add-ons: WhatsApp OTP and notifications (14
 
 | Gate | Question |
 | --- | --- |
-| G1 | Final offering, application, and capability codes, and their manifest key mapping. |
+| G1 | Final offering, application, and capability codes, and their manifest key mapping. **Resolved 2026-11-19:** see [G1 resolution](#g1-resolution-codes-and-manifest-key-mapping). |
 | G2 | Enforcement of quantity limits (outlets, active members, staff accounts). ADR 0002 reserves quantity limits as a separate decision. |
 | G3 | CORE schema for SaaS tenant subscriptions and invoices, and how it relates to brand-level contracts. |
 | G4 | Approval of new dependencies for Apple Wallet pass signing and the Google Wallet API. |
 | G5 | Stamp ledger as its own table versus a unit column on the point ledger. |
 | G6 | Ownership of birthday and win-back rewards: Loyalty-issued rewards versus Promotion-owned campaigns (Promotion currently lists email campaign delivery as deferred). |
+
+### G1 resolution: codes and manifest key mapping
+
+Confirmed by the product owner on 2026-11-19. Evidence: Business Runtime `main` `f91f3a7` (`src/config/entitlement-manifest.ts`, `src/common/entitlements/effective-entitlements.ts`).
+
+| Kind | Code | Reaches Runtime | Manifest key |
+| --- | --- | --- | --- |
+| Offering | `LOYALTY` (trade name Digvation Loyalty) | No (ADR 0001 rule 1) | None |
+| Shared add-on | `LOYALTY_PREMIUM` (trade name Loyalty Premium) | No | None |
+| Application | `LOYALTY_APP` | Yes, as an application grant | None in the current manifest format (see rule 4) |
+| Capability | `LOYALTY_STAMPS` | Yes | `capabilities.CUSTOMER.LOYALTY_STAMPS` |
+| Capability | `LOYALTY_TIERS` | Yes | `capabilities.CUSTOMER.LOYALTY_TIERS` |
+| Capability | `MEMBER_CARD_DESIGN` | Yes | `capabilities.CUSTOMER.MEMBER_CARD_DESIGN` |
+| Capability | `MEMBER_WALLET_PASS` | Yes | `capabilities.CUSTOMER.MEMBER_WALLET_PASS` |
+| Capability | `LOYALTY_PUBLIC_API` | Yes | `capabilities.CUSTOMER.LOYALTY_PUBLIC_API` |
+
+Rules:
+
+1. **New manifest keys are optional and default to off.** The manifest parser currently requires every key of `capabilities.CUSTOMER` (`MEMBERSHIP`, `LOYALTY_POINTS`) and rejects unknown keys. The five new keys are added as optional keys, read only when present (the existing optional `CATALOG` group pattern), so every existing manifest stays valid and grants nothing new. `MEMBERSHIP` and `LOYALTY_POINTS` stay required.
+2. **Runtime vocabulary is closed.** The five capability codes are added to the Runtime capability vocabulary in the same change that adds the manifest keys; until then CORE must not emit them, because Runtime rejects unknown codes.
+3. **Standalone tenants have no domain grant.** A `LOYALTY`-only tenant resolves to an empty domain set (`POS` disabled). Loyalty behavior must therefore be gated by capability, never by the `POS` domain; POS-only operations stay unavailable.
+4. **`LOYALTY_APP` uses real application grants, not a capability stand-in.** Runtime has no application grants yet. The Digvation Loyalty application is built only after [ADR 0001](0001-commercial-offerings-and-operational-applications.md) step 6 (application set in effective entitlements and session, server-side grant checks), which itself waits on ADR 0001 G4 (how user application access is represented). `LOYALTY_APP` is carried in the CORE projection `effectiveEntitlements.applications` (ADR 0002); a manifest key for applications is defined with ADR 0001 step 6, not here.
+5. **CORE catalog entries.** `LOYALTY` maps to: no domain, applications `BACKOFFICE` + `LOYALTY_APP`, included capabilities `MEMBERSHIP`, `LOYALTY_POINTS` and the five capabilities above. `LOYALTY_PREMIUM` is a shared add-on compatible with POS offerings and grants the five capabilities. Plan limits per the plan table stay commercial until G2.
 
 ## Consequences
 
@@ -72,7 +95,7 @@ Each step needs its own approval.
 3. Runtime: introduce `LoyaltyPort` and move the existing finalized-Sale earn, redeem, and reversal calls behind it without behavior change.
 4. Runtime: earning from non-POS sources with `sourceSystem` + `sourceReference` idempotency; resolve G5 and add stamp programs and the stamp ledger.
 5. Runtime + Web: card design, tiers, Member Portal premium card, email OTP channel.
-6. Runtime + Web: the Digvation Loyalty operational application (resolves its application grant); wallet passes after G4.
+6. Runtime + Web: the Digvation Loyalty operational application, after ADR 0001 step 6 (application grants); wallet passes after G4.
 7. Runtime: public Loyalty API and outgoing webhooks for external POS.
 8. CORE: SaaS tenant subscriptions and invoices (G3); until then the WhatsApp click-to-chat billing queue of D7.
 9. Shared Installation for standalone merchants and a pilot with one client that already uses Digvation POS.
