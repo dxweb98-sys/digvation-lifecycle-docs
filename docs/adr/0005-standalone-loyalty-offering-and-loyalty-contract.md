@@ -1,0 +1,78 @@
+# ADR 0005: Standalone Loyalty Offering and the Loyalty Contract
+
+- **Status:** Proposed (2026-11-19). Decisions D1 to D8 were confirmed by the product owner in discussion on 2026-11-19; items marked **Decision gate** are not final contracts. Acceptance happens on merge of this ADR.
+- **Refines:** [ADR 0001](0001-commercial-offerings-and-operational-applications.md) (offerings, applications, shared add-ons) and [ADR 0002](0002-core-offering-model-and-runtime-projection-contract.md) D3 (Customer Engagement add-on).
+- **Scope:** Ecosystem architecture, CORE catalog/billing direction, and the Customer/Membership/Loyalty capability contract in [scopes/CUSTOMER_MEMBERSHIP.md](../../scopes/CUSTOMER_MEMBERSHIP.md). Not implementation authority: each step in [Implementation sequence](#implementation-sequence) needs its own approval.
+- **Numbering:** 0003 and 0004 are referenced by `docs/CORE_FUNCTIONAL_SPEC.md` but are not present in this folder; this ADR uses 0005 to avoid a collision.
+- **Evidence:** Runtime/Web `v1.6.1` capability index in [docs/CURRENT_PLATFORM.md](../CURRENT_PLATFORM.md) (last verified 2026-10-27); CORE functional spec v1.3 (approved 2026-11-10).
+
+## Context
+
+Digvation wants to sell loyalty to businesses that do not use Digvation POS, and to offer a premium loyalty experience (designed member cards, stamp cards, tiers, phone wallet passes) to existing POS clients.
+
+Verified constraints:
+
+- Customer, Membership, and Loyalty Points already exist in Business Runtime (`MEMBERSHIP`, `LOYALTY_POINTS`): enrollment, immutable point ledger, earn after a `FINALIZED` POS Sale, redemption, reversal compensation, member import, opening balances, manual adjustment, and a phone/WhatsApp-OTP Member Portal.
+- Tiers, stamp cards, card design, wallet passes, earning from non-POS sources, and email OTP do not exist. Tiers are listed as deferred in the scope contract.
+- ADR 0001 keeps one Backoffice and states that a shared add-on is effective only while at least one compatible offering is active. Customer Engagement is a shared add-on (ADR 0002 D3), so it cannot be sold alone.
+- CORE functional spec v1.3 lists "subscriptions of tenants inside a SaaS" as out of scope, so CORE cannot yet bill small standalone merchants.
+
+## Decision
+
+| ID | Decision |
+| --- | --- |
+| D1 | **Standalone Loyalty offering.** CORE gets a commercial offering for loyalty without POS (working code `LOYALTY`, trade name Digvation Loyalty). It grants no `POS` domain. It grants `BACKOFFICE` (ADR 0001 rule 3) and a new operational application for merchants without POS (working code `LOYALTY_APP`), and it **includes** `MEMBERSHIP`, `LOYALTY_POINTS`, and the premium capabilities of D3. Because these capabilities are included in the offering, not held as a shared add-on, the ADR 0001 add-on lifetime rule is respected. |
+| D2 | **The Loyalty contract is the single entry point.** Every source records loyalty outcomes through one contract: identify member, preview earn, record completed transaction, redeem, and reverse. Digvation POS calls it through a local port (`LoyaltyPort`) from the existing finalized-Sale flow, without changing accepted behavior. External POS systems call the same operations through a public API with a per-tenant API key. The Digvation Loyalty application uses the same contract. |
+| D3 | **New capabilities** (proposed Runtime keys, final codes in G1): `LOYALTY_STAMPS`, `LOYALTY_TIERS`, `MEMBER_CARD_DESIGN`, `MEMBER_WALLET_PASS`, `LOYALTY_PUBLIC_API`. For POS clients they are sold as a **Loyalty Premium** shared add-on, compatible with POS offerings, alongside Customer Engagement. |
+| D4 | **Idempotency across sources.** A completed transaction from any source carries `sourceSystem` + `sourceReference`; the pair is unique per tenant. A retry returns the first outcome. Stamps get their own immutable ledger with the same compensation rules as points (G5). |
+| D5 | **Deployment.** Standalone merchants run on a Digvation-operated Shared Installation (Client Installation Standard, Mode C). POS clients keep their existing Installation; Loyalty Premium is enabled through a new manifest revision. |
+| D6 | **Member OTP channel is a tenant setting.** New tenants default to email (Resend adapter in `outbound-messaging/`). Existing tenants keep WhatsApp OTP. WhatsApp for new tenants becomes a paid option later. |
+| D7 | **Standalone billing is a CORE extension.** CORE gains SaaS tenant subscriptions and invoices for standalone merchants (G3). Until that ships, a server job creates invoices and reminders and places a prefilled WhatsApp click-to-chat message in an operator queue; the operator sends it from WhatsApp Business. No unofficial WhatsApp automation is used. Payment is by bank transfer or static QRIS and is confirmed by an operator. After a 7-day grace period the tenant becomes read-only; data is never deleted. |
+| D8 | **No separate Loyalty service now.** Loyalty stays a capability inside Business Runtime. Extraction into its own deployable is allowed later only by swapping the `LoyaltyPort` adapter for HTTP or messaging, keeping the same data authority and contract. |
+
+### Commercial plans for the standalone offering (packaging hint, not runtime authorization)
+
+Prices are per outlet per month, in IDR. Plan names never reach Runtime; Runtime receives only capability grants and, after G2, quantity limits.
+
+| Plan | Price | Outlets | Active members | Staff accounts | Capabilities beyond `MEMBERSHIP` + `LOYALTY_POINTS` |
+| --- | --- | --- | --- | --- | --- |
+| Mikro | 69,000 | 1 | 500 | 2 | Points **or** one stamp program; template card designs only |
+| Menengah | 159,000 | Up to 3 | 3,000 | 5 | `LOYALTY_STAMPS`, `LOYALTY_TIERS` (3 tiers), `MEMBER_CARD_DESIGN`, `MEMBER_WALLET_PASS` |
+| Pro | 299,000 | Unlimited | Fair use | Unlimited | Menengah + `LOYALTY_PUBLIC_API`, per-location stamps, limited-edition cards |
+| Custom | Agreed per contract | Per contract | Per contract | Per contract | Any compatible set; Shared or Dedicated; white-label |
+
+Annual prepayment: 10 months for 12. Add-ons: WhatsApp OTP and notifications (149,000 per outlet per month, 210 messages), card design service (299,000 once), assisted data migration (199,000 once). Prices are subject to market validation by the product owner.
+
+### Decision gates
+
+| Gate | Question |
+| --- | --- |
+| G1 | Final offering, application, and capability codes, and their manifest key mapping. |
+| G2 | Enforcement of quantity limits (outlets, active members, staff accounts). ADR 0002 reserves quantity limits as a separate decision. |
+| G3 | CORE schema for SaaS tenant subscriptions and invoices, and how it relates to brand-level contracts. |
+| G4 | Approval of new dependencies for Apple Wallet pass signing and the Google Wallet API. |
+| G5 | Stamp ledger as its own table versus a unit column on the point ledger. |
+| G6 | Ownership of birthday and win-back rewards: Loyalty-issued rewards versus Promotion-owned campaigns (Promotion currently lists email campaign delivery as deferred). |
+
+## Consequences
+
+- The Customer/Membership/Loyalty scope contract gains an approved-next-scope section; tiers move out of Deferred. Point purchase and point transfer become explicitly unsupported.
+- Digvation POS must route its existing loyalty calls behind `LoyaltyPort` before any non-POS source is added. This is a re-home of accepted behavior, not a rewrite.
+- One Backoffice remains. Card design, stamp programs, tiers, and API keys are new Backoffice modules gated by capability.
+- The Member Portal is extended, not replaced.
+- A Shared Installation for standalone merchants must meet the Infrastructure, Client Installation, and Security Acceptance standards before its first production tenant.
+- Personal data handling (email, phone) for standalone merchants follows the same tenant isolation and PDP obligations as existing clients.
+
+## Implementation sequence
+
+Each step needs its own approval.
+
+1. Accept this ADR and the scope-contract update.
+2. Resolve G1; register the offering, application, capabilities, add-on, prices, and manifest key mapping in the CORE catalog.
+3. Runtime: introduce `LoyaltyPort` and move the existing finalized-Sale earn, redeem, and reversal calls behind it without behavior change.
+4. Runtime: earning from non-POS sources with `sourceSystem` + `sourceReference` idempotency; resolve G5 and add stamp programs and the stamp ledger.
+5. Runtime + Web: card design, tiers, Member Portal premium card, email OTP channel.
+6. Runtime + Web: the Digvation Loyalty operational application (resolves its application grant); wallet passes after G4.
+7. Runtime: public Loyalty API and outgoing webhooks for external POS.
+8. CORE: SaaS tenant subscriptions and invoices (G3); until then the WhatsApp click-to-chat billing queue of D7.
+9. Shared Installation for standalone merchants and a pilot with one client that already uses Digvation POS.

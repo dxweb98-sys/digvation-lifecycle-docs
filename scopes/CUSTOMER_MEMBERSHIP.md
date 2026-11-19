@@ -3,7 +3,7 @@
 Kind: `SHARED_BUSINESS_FOUNDATION` + `SHARED_BUSINESS_CAPABILITY`  
 Status: `PARTIAL`
 Entitlement Class: `PLATFORM_FOUNDATION` + `CAPABILITY`  
-Commercial Packaging: customer identity foundation + bundled/optional Membership + Loyalty capability
+Commercial Packaging: customer identity foundation + bundled/optional Membership + Loyalty capability; standalone Loyalty offering and Loyalty Premium add-on proposed in [ADR 0005](../docs/adr/0005-standalone-loyalty-offering-and-loyalty-contract.md)
 
 ## Verified Delivery State
 
@@ -15,7 +15,7 @@ Release: the evidence SHAs above are included in Runtime/Web `v1.6.1` (`main`, r
 
 ## Purpose
 
-Provide one reusable customer identity, Membership capability, and Loyalty Points authority that can be consumed by POS, Scheduling, Workshop, and future Digvation business domains.
+Provide one reusable customer identity, Membership capability, and Loyalty Points authority that can be consumed by POS, Scheduling, Workshop, and future Digvation business domains, and, once ADR 0005 is implemented, by the standalone Digvation Loyalty application and external POS systems through the same Loyalty contract.
 
 For the current product direction, **Membership, Loyalty Points, and Promotion are treated as one integrated customer-loyalty/commercial experience**, but their durable authorities remain explicit:
 
@@ -629,6 +629,22 @@ Implemented Promotion may target active members for monetary discounts. Loyalty 
 
 Promotion remains governed by `PROMOTION_COMMERCIAL.md`.
 
+## Next Scope (ADR 0005)
+
+Proposed in [ADR 0005](../docs/adr/0005-standalone-loyalty-offering-and-loyalty-contract.md). Not implemented. Each item still requires its own explicit work unit; its decision gates G1 to G6 apply.
+
+- **Loyalty contract:** one entry point (identify member, preview earn, record completed transaction, redeem, reverse) for Digvation POS through a local `LoyaltyPort`, for external POS through a public API, and for the Digvation Loyalty application. Existing finalized-Sale behavior is re-homed behind the port, not rewritten.
+- **Non-POS earning sources:** a completed transaction from any source carries `sourceSystem` + `sourceReference`, unique per tenant, as its idempotency key.
+- **Stamp cards (`LOYALTY_STAMPS`):** stamp programs with stamps per card and a reward, an immutable stamp ledger with compensating reversal, card completion, and opening stamps for migration.
+- **Tiers (`LOYALTY_TIERS`):** tier definitions, qualification thresholds, and tier changes recorded with history.
+- **Member card design (`MEMBER_CARD_DESIGN`):** versioned card design per tier or stamp program (artwork through the existing files/media foundation, finish, ink color, automatic contrast and safe-area checks).
+- **Wallet passes (`MEMBER_WALLET_PASS`):** Apple Wallet and Google Wallet passes updated when balances change.
+- **Public API (`LOYALTY_PUBLIC_API`):** per-tenant API keys and signed outgoing webhooks.
+- **Member OTP channel:** a tenant setting; email for new tenants, WhatsApp retained for existing tenants.
+- **Member Portal:** extended with the premium card, stamp card, and wallet pass; not replaced.
+
+Not supported by product decision (2026-11-19): purchasing points and transferring points between members.
+
 ## Deferred / Future
 
 Unless explicitly activated:
@@ -637,12 +653,9 @@ Unless explicitly activated:
 - recurring Membership fee;
 - Membership renewal billing;
 - multiple membership programs per tenant;
-- Silver/Gold/Platinum or other tiers;
-- automatic tier progression;
 - point expiry;
 - birthday points;
 - referral points;
-- point transfer;
 - household/shared points;
 - manual bonus campaigns outside Promotion;
 - advanced segmentation;
@@ -661,6 +674,7 @@ Unless explicitly activated:
 - Membership references Customer and does not duplicate Customer master data;
 - Membership and Loyalty Points are reusable cross-domain capabilities, not POS-local features;
 - POS owns Sale/payment and only supplies authoritative transaction outcomes;
+- every transaction source, including Digvation POS, external POS, and the Digvation Loyalty application, records loyalty outcomes only through the Loyalty contract (ADR 0005); none writes the ledger directly;
 - Catalog owns item/service identity, not loyalty rules;
 - item-specific point rules are Loyalty-owned references to Catalog;
 - Promotion owns temporary campaign benefits/modifiers;
