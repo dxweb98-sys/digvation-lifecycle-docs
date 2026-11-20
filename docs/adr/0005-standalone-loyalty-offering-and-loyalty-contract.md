@@ -53,6 +53,7 @@ Annual prepayment: 10 months for 12. Add-ons: WhatsApp OTP and notifications (14
 | G4 | Approval of new dependencies for Apple Wallet pass signing and the Google Wallet API. |
 | G5 | Stamp ledger as its own table versus a unit column on the point ledger. |
 | G6 | Ownership of birthday and win-back rewards: Loyalty-issued rewards versus Promotion-owned campaigns (Promotion currently lists email campaign delivery as deferred). |
+| G7 | How CORE represents a plan-dependent capability set for `LOYALTY` (points only, stamps only, or both): separate offerings per plan, or one offering plus offering-scoped add-ons for `LOYALTY_POINTS` and `LOYALTY_STAMPS`. |
 
 ### G1 resolution: codes and manifest key mapping
 
@@ -75,7 +76,17 @@ Rules:
 2. **Runtime vocabulary is closed.** The five capability codes are added to the Runtime capability vocabulary in the same change that adds the manifest keys; until then CORE must not emit them, because Runtime rejects unknown codes.
 3. **Standalone tenants have no domain grant.** A `LOYALTY`-only tenant resolves to an empty domain set (`POS` disabled). Loyalty behavior must therefore be gated by capability, never by the `POS` domain; POS-only operations stay unavailable.
 4. **`LOYALTY_APP` uses real application grants, not a capability stand-in.** Runtime has no application grants yet. The Digvation Loyalty application is built only after [ADR 0001](0001-commercial-offerings-and-operational-applications.md) step 6 (application set in effective entitlements and session, server-side grant checks), which itself waits on ADR 0001 G4 (how user application access is represented). `LOYALTY_APP` is carried in the CORE projection `effectiveEntitlements.applications` (ADR 0002); a manifest key for applications is defined with ADR 0001 step 6, not here.
-5. **CORE catalog entries.** `LOYALTY` maps to: no domain, applications `BACKOFFICE` + `LOYALTY_APP`, included capabilities `MEMBERSHIP`, `LOYALTY_POINTS` and the five capabilities above. `LOYALTY_PREMIUM` is a shared add-on compatible with POS offerings and grants the five capabilities. Plan limits per the plan table stay commercial until G2.
+5. **CORE catalog entries.** `LOYALTY` maps to: no domain, applications `BACKOFFICE` + `LOYALTY_APP`, included capabilities `MEMBERSHIP`, `LOYALTY_POINTS` and the five capabilities above. Amended on 2026-11-20: `LOYALTY_POINTS` and `LOYALTY_STAMPS` are not both always included; see [Amendment: independent programs](#amendment-independent-programs-2026-11-20) and G7. `LOYALTY_PREMIUM` is a shared add-on compatible with POS offerings and grants the five capabilities. Plan limits per the plan table stay commercial until G2.
+
+### Amendment: independent programs (2026-11-20)
+
+Confirmed by the product owner on 2026-11-20. It refines D1, D3, and G1 rule 5; the Loyalty contract (D2) and idempotency rule (D4) are unchanged.
+
+- A tenant's loyalty programs are independent. `MEMBERSHIP` is always granted with `LOYALTY`; `LOYALTY_POINTS` and `LOYALTY_STAMPS` are each granted only when the tenant's plan includes them, so a tenant can run points only, stamps only, or both. CORE representation of this is gate G7.
+- Points can be redeemed as a discount, exchanged for reward vouchers from an owner-defined catalog, or both, as a tenant setting. A reward exchange deducts points immediately; voucher validity is set by the tenant.
+- Stamp program rules (stamps per card, minimum spend, reward type, reward validity) are set by the owner.
+- Tenants without a POS capture points and stamps in the Digvation Loyalty application (cashier scan with transaction total, or a rotating single-use stamp QR scanned by the member). This is behavior of `LOYALTY_APP` and stays behind application grants (G1 rule 4).
+- Scope details and open questions: [scopes/CUSTOMER_MEMBERSHIP.md](../../scopes/CUSTOMER_MEMBERSHIP.md), Next Scope.
 
 ## Consequences
 
