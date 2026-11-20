@@ -635,7 +635,11 @@ Proposed in [ADR 0005](../docs/adr/0005-standalone-loyalty-offering-and-loyalty-
 
 - **Loyalty contract:** one entry point (identify member, preview earn, record completed transaction, redeem, reverse) for Digvation POS through a local `LoyaltyPort`, for external POS through a public API, and for the Digvation Loyalty application. Existing finalized-Sale behavior is re-homed behind the port, not rewritten.
 - **Non-POS earning sources:** a completed transaction from any source carries `sourceSystem` + `sourceReference`, unique per tenant, as its idempotency key.
-- **Stamp cards (`LOYALTY_STAMPS`):** stamp programs with stamps per card and a reward, an immutable stamp ledger with compensating reversal, card completion, and opening stamps for migration.
+- **Independent programs:** points (`LOYALTY_POINTS`) and stamp cards (`LOYALTY_STAMPS`) are independent capabilities on top of `MEMBERSHIP`. A tenant may run points only, stamps only, or both. With both, the member experience shows them as separate sections (separate tabs); they are never merged into one balance.
+- **Stamp cards (`LOYALTY_STAMPS`):** stamp programs with an immutable stamp ledger with compensating reversal, card completion, and opening stamps for migration. Rules set by the owner per program: stamps required per card, minimum spend for one stamp, reward type (free catalog product, percentage discount, fixed discount, bonus points when Loyalty Points is active, or a free-text reward), and reward validity in days. A completed card issues a member voucher.
+- **Point redemption modes (tenant setting):** discount, reward catalog, or both. Discount keeps the existing `pointValue` contract (presented as A points = B currency) and is entered either by the cashier or through a member-generated, single-use, short-lived redemption code scanned at checkout; points are still deducted only when the transaction completes.
+- **Reward catalog and vouchers:** owner-defined rewards with a point cost. Exchanging a reward deducts the points immediately through an immutable ledger entry and issues a member voucher. Voucher validity in days is set by the tenant. A voucher is used once, at the cashier, by scanning it.
+- **Capture channels:** Digvation POS records outcomes automatically after `FINALIZED`; external POS systems use the public API; tenants without a POS use the Digvation Loyalty application, where the cashier either scans the member code and enters the transaction total (points and stamps previewed before saving) or shows a rotating, single-use stamp QR code that the member scans. Every channel goes through the Loyalty contract and its idempotency key.
 - **Tiers (`LOYALTY_TIERS`):** tier definitions, qualification thresholds, and tier changes recorded with history.
 - **Member card design (`MEMBER_CARD_DESIGN`):** versioned card design per tier or stamp program (artwork through the existing files/media foundation, finish, ink color, automatic contrast and safe-area checks).
 - **Wallet passes (`MEMBER_WALLET_PASS`):** Apple Wallet and Google Wallet passes updated when balances change.
@@ -644,6 +648,8 @@ Proposed in [ADR 0005](../docs/adr/0005-standalone-loyalty-offering-and-loyalty-
 - **Member Portal:** extended with the premium card, stamp card, and wallet pass; not replaced.
 
 Not supported by product decision (2026-11-19): purchasing points and transferring points between members.
+
+Open decisions for this scope (2026-11-20): whether points return when a reward voucher expires unused; the stamp limit (one per qualifying transaction or per day); the rotating stamp QR interval and redemption-code lifetime; whether discount redemption must use multiples of the configured point unit.
 
 ## Deferred / Future
 
