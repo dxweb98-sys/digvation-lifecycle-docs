@@ -649,7 +649,12 @@ Proposed in [ADR 0005](../docs/adr/0005-standalone-loyalty-offering-and-loyalty-
 
 Not supported by product decision (2026-11-19): purchasing points and transferring points between members.
 
-Open decisions for this scope (2026-11-20): whether points return when a reward voucher expires unused; the stamp limit (one per qualifying transaction or per day); the rotating stamp QR interval and redemption-code lifetime; whether discount redemption must use multiples of the configured point unit.
+Tenant settings for this scope (product decision 2026-11-20): these behaviors are chosen by each client, so Loyalty exposes them as tenant configuration rather than fixed product rules:
+
+- whether points return when a reward voucher expires unused;
+- the stamp limit (for example one per qualifying transaction, or one per day);
+- the rotating stamp QR interval and the redemption-code lifetime;
+- whether discount redemption must use multiples of the configured point unit.
 
 ## Deferred / Future
 
